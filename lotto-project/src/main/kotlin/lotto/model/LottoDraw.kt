@@ -23,12 +23,17 @@ data class LottoResult(
 class LottoDraw(
     val round: Int,
     private val tickets: MutableList<LottoTicket>,
-    var winningNumbers: LottoTicket? = null,
-    var bonusNumbers: List<Int>? = null,
+    private var winningNumbers: LottoTicket? = null,
+    private var bonusNumbers: List<Int>? = null,
     private val result: MutableMap<LottoRank, Int> = mutableMapOf(),
     private var totalIncome: Int = 0,
     private var isEnded: Boolean = false,
+    private var ticketCount: Int = 0,
 ) {
+    init {
+        ticketCount = tickets.size
+    }
+
     private fun getRank(
         matchNumbers: Int,
         matchBonusNumbers: Int,
@@ -44,19 +49,19 @@ class LottoDraw(
     fun setResult() {
         if (isEnded) return
 
-        tickets.forEach {
-            val matchNumbers = it.compare(winningNumbers)
-            val matchBonusNumbers = it.hasBonusNumbers(bonusNumbers)
-            val rank = getRank(matchNumbers, matchBonusNumbers)
-            result[rank] = result.getOrDefault(rank, 0) + 1
-        }
+        tickets
+            .groupBy { getRank(it.compare(winningNumbers), it.hasBonusNumbers(bonusNumbers)) }
+            .forEach { (rank, list) -> result[rank] = list.size }
+
         totalIncome = result.entries.fold(0) { acc, (rank, count) -> acc + rank.prize * count }
         isEnded = true
+        tickets.clear()
     }
 
     fun addTicket(tickets: List<LottoTicket>) {
         if (isEnded) return
         this.tickets.addAll(tickets)
+        ticketCount = this.tickets.size
     }
 
     fun endDraw(
@@ -76,7 +81,7 @@ class LottoDraw(
 
     override fun toString(): String =
         if (isEnded) {
-            "#$round".padEndKo(6) + tickets.size.toFormattedString().padEndKo(8) + getResult().toString()
+            "#$round".padEndKo(6) + ticketCount.toFormattedString().padEndKo(8) + getResult().toString()
         } else {
             "#$round".padEndKo(6) + "진행 중".padEndKo(8)
         }
@@ -85,7 +90,7 @@ class LottoDraw(
         if (isEnded) {
             buildString {
                 appendLine("회차: $round")
-                appendLine("총 티켓: ${tickets.size.toFormattedString()}")
+                appendLine("총 티켓: ${ticketCount.toFormattedString()}")
                 appendLine("─────────────────")
                 LottoRank.entries
                     .filter { it != LottoRank.LOSE }
