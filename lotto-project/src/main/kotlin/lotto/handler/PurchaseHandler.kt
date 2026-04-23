@@ -26,16 +26,7 @@ class PurchaseHandler(
                     outputView.printMessage("수동으로 입력할 번호(${MIN_NUMBER}-${MAX_NUMBER})를 공백으로 구분해서 ${TICKET_SIZE}개 입력하세요: ")
                     inputView.inputManualTicketNumbers()
                 }
-            val tickets = LottoService.purchase(account, count, manualTicketNumbers)
-            val lastRound = LottoStore.getLast()
-            if (lastRound == null || lastRound.isEnded()) {
-                val draw = LottoService.createDraw(LottoStore.getLastRound() + 1, tickets)
-                LottoStore.save(draw)
-            } else {
-                lastRound.addTicket(tickets)
-                LottoStore.updateLast(lastRound)
-            }
-
+            val tickets = LottoService.purchaseAndSave(account, count, manualTicketNumbers)
             outputView.printMessage(tickets.mapIndexed { index, ticket -> "#${index + 1}: $ticket" }.joinToString("\n"))
         } catch (e: IllegalArgumentException) {
             outputView.printError(e.message)
