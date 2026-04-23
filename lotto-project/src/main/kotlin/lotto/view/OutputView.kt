@@ -1,7 +1,7 @@
 package lotto.view
 
 import lotto.model.Menu
-import util.toFormattedString
+import lotto.util.toFormattedString
 
 interface OutputPort {
     fun print(message: String)
