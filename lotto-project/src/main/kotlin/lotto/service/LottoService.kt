@@ -12,8 +12,9 @@ object LottoService {
         account: Account,
         count: Int,
         manualNumbers: List<List<Int>>,
+        semiAutoNumbers: List<List<Int>>,
     ): List<LottoTicket> {
-        val tickets = purchase(account, count, manualNumbers)
+        val tickets = purchase(account, count, manualNumbers, semiAutoNumbers)
         val lastRound = LottoStore.getLast()
         if (lastRound == null || lastRound.isEnded()) {
             val draw = createDraw(LottoStore.getLastRound() + 1, tickets)
@@ -41,16 +42,25 @@ object LottoService {
         account: Account,
         count: Int,
         manualNumbers: List<List<Int>>,
+        semiAutoNumbers: List<List<Int>>,
     ): List<LottoTicket> {
-        require(count >= manualNumbers.size) { "수동 생성할 티켓양이 전체 양을 넘을 수 없습니다." }
         val price = count * TICKET_PRICE
 
         account.withdraw(price)
         return List(count) { index ->
-            if (index < manualNumbers.size) {
-                machine.createManualTicket(manualNumbers[index])
-            } else {
-                machine.createAutoTicket()
+            when {
+                index < manualNumbers.size -> {
+                    machine.createManualTicket(manualNumbers[index])
+                }
+
+                index - manualNumbers.size < semiAutoNumbers.size -> {
+                    machine
+                        .createSemiAutoTicket(semiAutoNumbers[index - manualNumbers.size])
+                }
+
+                else -> {
+                    machine.createAutoTicket()
+                }
             }
         }
     }
