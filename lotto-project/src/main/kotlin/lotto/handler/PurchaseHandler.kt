@@ -5,7 +5,6 @@ import lotto.constant.MIN_NUMBER
 import lotto.constant.TICKET_SIZE
 import lotto.model.Account
 import lotto.service.LottoService
-import lotto.service.LottoStore
 import lotto.view.InputView
 import lotto.view.OutputView
 
