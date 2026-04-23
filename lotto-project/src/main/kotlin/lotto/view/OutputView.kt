@@ -1,8 +1,7 @@
 package lotto.view
 
 import lotto.model.Menu
-
-fun Int.toFormattedString(): String = String.format("%,d", this)
+import util.toFormattedString
 
 interface OutputPort {
     fun print(message: String)

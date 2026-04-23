@@ -3,7 +3,7 @@ package lotto.model
 import kotlinx.serialization.Serializable
 import lotto.constant.BONUS_COUNT
 import lotto.constant.TICKET_SIZE
-import toFormattedString
+import util.toFormattedString
 
 data class LottoResult(
     val result: Map<LottoRank, Int>,
