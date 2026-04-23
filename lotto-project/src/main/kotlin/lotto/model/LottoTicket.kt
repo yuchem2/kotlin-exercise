@@ -15,7 +15,10 @@ data class LottoTicket(
         require(numbers.toSet().size == TICKET_SIZE) { "로또 번호에 중복은 없어야 합니다" }
     }
 
-    fun compare(target: LottoTicket): Int = numbers.intersect(target.numbers.toSet()).size
+    fun compare(target: LottoTicket?): Int = if (target != null) numbers.intersect(target.numbers.toSet()).size else 0
 
-    fun hasBonusNumbers(target: List<Int>): Int = numbers.intersect(target.toSet()).size
+    fun hasBonusNumbers(target: List<Int>?): Int = if (target != null) numbers.intersect(target.toSet()).size else 0
+
+    override fun toString(): String = numbers.joinToString(separator = ", ")
+
 }

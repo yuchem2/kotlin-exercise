@@ -29,8 +29,10 @@ object LottoService {
     fun createDraw(
         round: Int,
         tickets: List<LottoTicket>,
-    ): LottoDraw {
-        val (winningNumbers, bonusNumbers) = machine.drawing()
-        return LottoDraw(round, tickets, winningNumbers, bonusNumbers)
+    ): LottoDraw = LottoDraw(round, tickets as MutableList<LottoTicket>)
+
+    fun endDraw(draw: LottoDraw) {
+        val (winnings, bonus) = machine.drawing()
+        draw.endDraw(winnings, bonus)
     }
 }

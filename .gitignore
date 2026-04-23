@@ -36,3 +36,6 @@ out/
 # Gradle
 .gradle
 build/
+
+# local history
+lotto.json
