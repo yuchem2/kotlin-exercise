@@ -35,7 +35,8 @@ class PurchaseHandler(
                     inputView.inputManualTicketNumbers()
                 }
             val tickets = LottoService.purchaseAndSave(account, count, manualTicketNumbers, semiAutoCountNumbers)
-            outputView.printMessage(tickets.mapIndexed { index, ticket -> "#${index + 1}: $ticket" }.joinToString("\n"))
+            // outputView.printMessage(tickets.mapIndexed { index, ticket -> "#${index + 1}: $ticket" }.joinToString("\n"))
+            outputView.printMessage("구매가 완료되었습니다.")
         } catch (e: IllegalArgumentException) {
             outputView.printError(e.message)
         }

@@ -1,7 +1,7 @@
 package lotto.view
 
-import lotto.model.LottoDraw
 import lotto.model.Menu
+import lotto.util.padEndKo
 import lotto.util.toFormattedString
 
 interface OutputPort {
@@ -40,19 +40,27 @@ class OutputView(
 
     fun printError(message: String?) = output.println("[ERROR] ${message ?: "예기치 못한 오류입니다."}")
 
-    fun printHistory(message: String) {
-        output.println("=================================================")
-        output.println("회차\t총 티켓\t1등\t2등\t3등\t4등\t5등\t그외\t총수익")
-        output.println(message)
-        output.println("=================================================")
+    fun printDrawHeader() {
+        val output =
+            buildString {
+                append("회차".padEndKo(6))
+                append("총티켓".padEndKo(14))
+                append("1등".padEndKo(14))
+                append("2등".padEndKo(14))
+                append("3등".padEndKo(14))
+                append("4등".padEndKo(14))
+                append("5등".padEndKo(14))
+                append("낙첨".padEndKo(16))
+                append("총수익".padEndKo(20))
+            }
+        println(output)
     }
 
-    fun printDraw(draw: LottoDraw) {
-        output.println("=================================================")
-        output.println("당첨 번호: ${draw.winningNumbers}\t 보너스 번호: ${draw.bonusNumbers}")
-        output.println("회차\t총 티켓\t1등\t2등\t3등\t4등\t5등\t그외\t총수익")
-        output.println(draw.toString())
-        output.println("=================================================")
+    fun printHistory(message: String) {
+        output.println("=".repeat(120))
+        printDrawHeader()
+        output.println(message)
+        output.println("=".repeat(120))
     }
 
     fun printBalance(amount: Int) {

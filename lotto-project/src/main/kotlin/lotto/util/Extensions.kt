@@ -24,6 +24,13 @@ fun Int.toFormattedString(): String {
             }.trim()
         }
 
-        else -> String.format("%,d", this)
+        else -> {
+            String.format("%,d", this)
+        }
     }
+}
+
+fun String.padEndKo(length: Int): String {
+    val koreanCount = this.count { it.code in 0xAC00..0xD7A3 }
+    return this.padEnd(length - koreanCount)
 }

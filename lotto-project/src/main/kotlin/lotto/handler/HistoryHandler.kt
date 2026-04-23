@@ -32,7 +32,7 @@ class HistoryHandler(
         if (history == null) {
             outputView.printError("잘못된 회차 번호입니다.")
         } else {
-            outputView.printDraw(history)
+            outputView.printMessage(history.getSummary())
         }
     }
 }
