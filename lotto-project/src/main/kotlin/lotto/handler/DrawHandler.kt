@@ -14,6 +14,6 @@ class DrawHandler(
             outputView.printMessage("진행되고 있는 회차가 없거나, 이미 종료되었습니다.")
             return
         }
-        outputView.printHistory(lastRound.toString())
+        outputView.printMessage(lastRound.getSummary())
     }
 }
