@@ -26,6 +26,17 @@ object LottoService {
         return tickets
     }
 
+    fun endAndSave(account: Account): LottoDraw? {
+        val lastRound = LottoStore.getLast()
+        if (lastRound == null || lastRound.isEnded()) return null
+
+        endDraw(lastRound)
+        LottoStore.updateLast(lastRound)
+        account.deposit(lastRound.getResult().totalIncome)
+
+        return lastRound
+    }
+
     private fun purchase(
         account: Account,
         count: Int,
@@ -49,7 +60,7 @@ object LottoService {
         tickets: List<LottoTicket>,
     ): LottoDraw = LottoDraw(round, tickets as MutableList<LottoTicket>)
 
-    fun endDraw(draw: LottoDraw) {
+    private fun endDraw(draw: LottoDraw) {
         val (winnings, bonus) = machine.drawing()
         draw.endDraw(winnings, bonus)
     }
