@@ -17,15 +17,24 @@ class PurchaseHandler(
         try {
             outputView.printGuidance("구매할 티켓의 양을 입력하세요: ")
             val count = inputView.inputTicketCount()
-            outputView.printGuidance("수동으로 입력할 티켓의 양을 입력하세요(0: 전부자동): ")
+            outputView.printGuidance("수동으로 입력할 티켓의 양을 입력하세요: ")
             val manualCount = inputView.inputTicketCount()
+            outputView.printGuidance("반자동으로 입력할 티켓의 양을 입력하세요: ")
+            val semiAutoCount = inputView.inputTicketCount()
+
+            if (manualCount + semiAutoCount > count) throw IllegalArgumentException("처음 입력한 티켓의 양보다 수동 + 반자동 티켓의 양이 많습니다.")
 
             val manualTicketNumbers =
                 List(manualCount) {
-                    outputView.printMessage("수동으로 입력할 번호(${MIN_NUMBER}-${MAX_NUMBER})를 공백으로 구분해서 ${TICKET_SIZE}개 입력하세요: ")
+                    outputView.printGuidance("수동으로 입력할 번호(${MIN_NUMBER}-${MAX_NUMBER})를 공백으로 구분해서 ${TICKET_SIZE}개 입력하세요: ")
                     inputView.inputManualTicketNumbers()
                 }
-            val tickets = LottoService.purchaseAndSave(account, count, manualTicketNumbers)
+            val semiAutoCountNumbers =
+                List(semiAutoCount) {
+                    outputView.printGuidance("반자동으로 입력할 번호(${MIN_NUMBER}-${MAX_NUMBER})를 공백으로 구분해서 ${TICKET_SIZE}개 미만으로 입력하세요: ")
+                    inputView.inputManualTicketNumbers()
+                }
+            val tickets = LottoService.purchaseAndSave(account, count, manualTicketNumbers, semiAutoCountNumbers)
             outputView.printMessage(tickets.mapIndexed { index, ticket -> "#${index + 1}: $ticket" }.joinToString("\n"))
         } catch (e: IllegalArgumentException) {
             outputView.printError(e.message)
