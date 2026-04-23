@@ -10,20 +10,22 @@ object LottoStore {
     private var draws: MutableList<LottoDraw>
 
     init {
-        val data = File(LOTTO_STORE_PATH)
-            .takeIf { it.exists() }
-            ?.readText()
+        val data =
+            File(LOTTO_STORE_PATH)
+                .takeIf { it.exists() }
+                ?.readText()
 
-        draws = if (data == null) {
-            mutableListOf()
-        } else {
-            try {
-                Json.decodeFromString<MutableList<LottoDraw>>(data)
-            } catch (e: Exception) {
-                File(LOTTO_STORE_PATH).renameTo(File("$LOTTO_STORE_PATH.bak"))
+        draws =
+            if (data == null) {
                 mutableListOf()
+            } else {
+                try {
+                    Json.decodeFromString<MutableList<LottoDraw>>(data)
+                } catch (e: Exception) {
+                    File(LOTTO_STORE_PATH).renameTo(File("$LOTTO_STORE_PATH.bak"))
+                    mutableListOf()
+                }
             }
-        }
     }
 
     private fun persist() {

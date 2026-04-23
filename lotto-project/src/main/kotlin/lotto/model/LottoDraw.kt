@@ -7,7 +7,7 @@ import util.toFormattedString
 
 data class LottoResult(
     val result: Map<LottoRank, Int>,
-    val totalIncome: Int
+    val totalIncome: Int,
 ) {
     override fun toString(): String {
         val str = LottoRank.entries.fold("") { acc, entry -> "${acc}\t${result[entry] ?: 0}" }
@@ -23,7 +23,7 @@ class LottoDraw(
     var bonusNumbers: List<Int>? = null,
     private val result: MutableMap<LottoRank, Int> = mutableMapOf(),
     private var totalIncome: Int = 0,
-    private var isEnded: Boolean = false
+    private var isEnded: Boolean = false,
 ) {
     private fun getRank(
         matchNumbers: Int,
@@ -71,5 +71,4 @@ class LottoDraw(
     fun getResult(): LottoResult = LottoResult(result, totalIncome)
 
     override fun toString(): String = if (isEnded) "#${round}\t${tickets.size}\t${getResult()}" else "\t진행 중\t"
-
 }

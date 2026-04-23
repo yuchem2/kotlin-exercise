@@ -9,5 +9,5 @@ enum class Menu(
     DRAW(3, "추첨"),
     HISTORY(4, "회차 조회"),
     ACCOUNT(5, "계좌 조회"),
-    EXIT(0, "종료")
+    EXIT(0, "종료"),
 }

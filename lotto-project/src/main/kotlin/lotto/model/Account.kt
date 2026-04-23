@@ -1,7 +1,7 @@
 package lotto.model
 
 class Account(
-    private var amount: Int
+    private var amount: Int,
 ) {
     fun withdraw(amount: Int) {
         if (this.amount < amount) {
