@@ -26,6 +26,7 @@ kotlin {
 }
 
 tasks.withType<JavaExec> {
+    standardInput = System.`in`
     jvmArgs("-Dfile.encoding=UTF-8")
 }
 

@@ -23,9 +23,9 @@ class OutputView(
     private val output: OutputPort,
 ) {
     fun printWelcome() {
-        output.println("======================")
-        output.println("    로또 시스템 🎰    ")
-        output.println("======================")
+        output.println("==========================")
+        output.println("      로또 시스템        ")
+        output.println("==========================")
     }
 
     fun printMenu() {
@@ -40,13 +40,13 @@ class OutputView(
     fun printError(message: String?) = output.println("[ERROR] ${message ?: "예기치 못한 오류입니다."}")
 
     fun printHistory(message: String) {
-        output.print("=============================================")
-        output.print("회차\t총 티켓\t1등\t2등\t3등\t4등\t5등\t그외\t총수익")
-        output.print(message)
-        output.print("=============================================")
+        output.println("=============================================")
+        output.println("회차\t총 티켓\t1등\t2등\t3등\t4등\t5등\t그외\t총수익")
+        output.println(message)
+        output.println("=============================================")
     }
 
     fun printBalance(amount: Int) {
-        output.print("현재 잔액: ${amount.toFormattedString()}원")
+        output.println("현재 잔액: ${amount.toFormattedString()}원")
     }
 }
