@@ -1,5 +1,6 @@
 package lotto.view
 
+import lotto.model.LottoDraw
 import lotto.model.Menu
 import lotto.util.toFormattedString
 
@@ -43,6 +44,14 @@ class OutputView(
         output.println("=================================================")
         output.println("회차\t총 티켓\t1등\t2등\t3등\t4등\t5등\t그외\t총수익")
         output.println(message)
+        output.println("=================================================")
+    }
+
+    fun printDraw(draw: LottoDraw) {
+        output.println("=================================================")
+        output.println("당첨 번호: ${draw.winningNumbers}\t 보너스 번호: ${draw.bonusNumbers}")
+        output.println("회차\t총 티켓\t1등\t2등\t3등\t4등\t5등\t그외\t총수익")
+        output.println(draw.toString())
         output.println("=================================================")
     }
 
