@@ -1,8 +1,10 @@
 package lotto.model
 
+import kotlinx.serialization.Serializable
 import lotto.constant.BONUS_COUNT
 import lotto.constant.TICKET_SIZE
 
+@Serializable
 class LottoDraw(
     val round: Int,
     val tickets: List<LottoTicket>,
