@@ -23,7 +23,6 @@ object LottoService {
             lastRound.addTicket(tickets)
             LottoStore.updateLast(lastRound)
         }
-
         return tickets
     }
 
