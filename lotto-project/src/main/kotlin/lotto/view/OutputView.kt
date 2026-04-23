@@ -20,7 +20,7 @@ class ConsoleOutput : OutputPort {
 }
 
 class OutputView(
-    private val output: OutputPort
+    private val output: OutputPort,
 ) {
     fun printWelcome() {
         output.println("======================")

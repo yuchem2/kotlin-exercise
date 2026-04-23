@@ -20,5 +20,4 @@ data class LottoTicket(
     fun hasBonusNumbers(target: List<Int>?): Int = if (target != null) numbers.intersect(target.toSet()).size else 0
 
     override fun toString(): String = numbers.joinToString(separator = ", ")
-
 }

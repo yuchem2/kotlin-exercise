@@ -11,7 +11,7 @@ class ConsoleInput : InputPort {
 }
 
 class InputView(
-    private val input: InputPort
+    private val input: InputPort,
 ) {
     fun inputMenu(): Menu {
         val number =
