@@ -20,8 +20,6 @@ object LottoStore {
             }
     }
 
-    fun loadAll(): List<LottoDraw> = draws
-
     fun save(draw: LottoDraw) {
         draws.add(draw)
 
@@ -30,5 +28,9 @@ object LottoStore {
 
     fun getLastRound(): Int = draws.maxOfOrNull { it.round } ?: 0
 
+    fun getAll(): List<LottoDraw> = draws
+
     fun getByRound(round: Int): LottoDraw? = draws.find { it.round == round }
+
+    fun getLast(): LottoDraw? = draws.lastOrNull()
 }
