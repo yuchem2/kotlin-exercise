@@ -78,7 +78,7 @@ class App(
                 LottoStore.save(draw)
             } else {
                 lastRound.addTicket(tickets)
-                LottoStore.save(lastRound)
+                LottoStore.updateLast(lastRound)
             }
 
             outputView.printMessage(tickets.mapIndexed { index, ticket -> "#${index + 1}: $ticket" }.joinToString("\n"))
@@ -94,7 +94,7 @@ class App(
             return
         }
         LottoService.endDraw(lastRound)
-        LottoStore.save(lastRound)
+        LottoStore.updateLast(lastRound)
         account.deposit(lastRound.getResult().totalIncome)
         printHistoryByRound()
     }

@@ -4,6 +4,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import lotto.constant.LOTTO_STORE_PATH
 import lotto.model.LottoDraw
+import lotto.model.LottoTicket
 import java.io.File
 
 object LottoStore {
@@ -20,10 +21,19 @@ object LottoStore {
             }
     }
 
+    private fun persist() {
+        File(LOTTO_STORE_PATH).writeText(Json.encodeToString(draws))
+    }
+
     fun save(draw: LottoDraw) {
         draws.add(draw)
+        persist()
+    }
 
-        File(LOTTO_STORE_PATH).writeText(Json.encodeToString(draws))
+    fun updateLast(draw: LottoDraw) {
+        if (draws.isEmpty()) return
+        draws[draws.lastIndex] = draw
+        persist()
     }
 
     fun getLastRound(): Int = draws.maxOfOrNull { it.round } ?: 0
