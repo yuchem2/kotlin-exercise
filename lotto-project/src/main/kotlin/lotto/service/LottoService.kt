@@ -8,7 +8,25 @@ import lotto.model.LottoTicket
 object LottoService {
     private val machine = LottoMachine
 
-    fun purchase(
+    fun purchaseAndSave(
+        account: Account,
+        count: Int,
+        manualNumbers: List<List<Int>>,
+    ): List<LottoTicket> {
+        val tickets = purchase(account, count, manualNumbers)
+        val lastRound = LottoStore.getLast()
+        if (lastRound == null || lastRound.isEnded()) {
+            val draw = createDraw(LottoStore.getLastRound() + 1, tickets)
+            LottoStore.save(draw)
+        } else {
+            lastRound.addTicket(tickets)
+            LottoStore.updateLast(lastRound)
+        }
+
+        return tickets
+    }
+
+    private fun purchase(
         account: Account,
         count: Int,
         manualNumbers: List<List<Int>>,
@@ -26,7 +44,7 @@ object LottoService {
         }
     }
 
-    fun createDraw(
+    private fun createDraw(
         round: Int,
         tickets: List<LottoTicket>,
     ): LottoDraw = LottoDraw(round, tickets as MutableList<LottoTicket>)
