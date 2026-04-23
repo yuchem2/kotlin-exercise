@@ -1,7 +1,5 @@
 package lotto.model
 
-import kotlin.collections.plusAssign
-
 class Account(
     private var amount: Int
 ) {

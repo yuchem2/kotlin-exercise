@@ -1,9 +1,11 @@
 package lotto.model
 
+import kotlinx.serialization.Serializable
 import lotto.constant.MAX_NUMBER
 import lotto.constant.MIN_NUMBER
 import lotto.constant.TICKET_SIZE
 
+@Serializable
 data class LottoTicket(
     val numbers: List<Int>,
 ) {
