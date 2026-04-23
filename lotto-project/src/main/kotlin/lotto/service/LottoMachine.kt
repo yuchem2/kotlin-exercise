@@ -9,11 +9,13 @@ import lotto.model.LottoTicket
 internal object LottoMachine {
     private fun makeRandomNumbers(count: Int = TICKET_SIZE): List<Int> = (MIN_NUMBER..MAX_NUMBER).shuffled().take(count)
 
-    private fun makeBonusNumbers() = makeRandomNumbers(BONUS_COUNT)
-
     fun createAutoTicket(): LottoTicket = LottoTicket(makeRandomNumbers())
 
     fun createManualTicket(numbers: List<Int>): LottoTicket = LottoTicket(numbers)
 
-    fun drawing(): Pair<LottoTicket, List<Int>> = Pair(createAutoTicket(), makeBonusNumbers())
+    fun drawing(): Pair<LottoTicket, List<Int>> {
+        val numbers = makeRandomNumbers(TICKET_SIZE + BONUS_COUNT)
+        val (winnings, bonus) = numbers.chunked(TICKET_SIZE)
+        return Pair(createManualTicket(winnings), bonus)
+    }
 }
