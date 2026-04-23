@@ -10,7 +10,7 @@ data class LottoResult(
     val totalIncome: Int,
 ) {
     override fun toString(): String {
-        val str = LottoRank.entries.fold("") { acc, entry -> "${acc}\t${result[entry] ?: 0}" }
+        val str = LottoRank.entries.fold("") { acc, entry -> "${acc}\t${result[entry]?.toFormattedString() ?: 0}" }
         return "${str}\t${totalIncome.toFormattedString()}"
     }
 }
@@ -70,5 +70,5 @@ class LottoDraw(
 
     fun getResult(): LottoResult = LottoResult(result, totalIncome)
 
-    override fun toString(): String = if (isEnded) "#${round}\t${tickets.size}\t${getResult()}" else "\t진행 중\t"
+    override fun toString(): String = if (isEnded) "#${round}\t${tickets.size.toFormattedString()}\t${getResult()}" else "\t진행 중\t"
 }
