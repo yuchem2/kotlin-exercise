@@ -6,3 +6,4 @@ const val MAX_NUMBER = 45
 const val TICKET_SIZE = 6
 const val BONUS_COUNT = 1
 val LOTTO_STORE_PATH = System.getenv("LOTTO_STORE_PATH") ?: "lotto.json"
+val ACCOUNT_STORE_PATH = System.getenv("ACCOUNT_STORE_PATH") ?: "account.json"

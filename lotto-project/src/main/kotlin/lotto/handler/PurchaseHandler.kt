@@ -4,13 +4,13 @@ import lotto.constant.MAX_NUMBER
 import lotto.constant.MIN_NUMBER
 import lotto.constant.TICKET_PRICE
 import lotto.constant.TICKET_SIZE
-import lotto.model.Account
+import lotto.service.AccountStore
 import lotto.service.LottoService
 import lotto.view.InputView
 import lotto.view.OutputView
 
 class PurchaseHandler(
-    private val account: Account,
+    private val account: AccountStore,
     private val inputView: InputView,
     private val outputView: OutputView,
 ) : Handler {

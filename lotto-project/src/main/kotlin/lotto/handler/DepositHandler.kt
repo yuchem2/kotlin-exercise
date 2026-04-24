@@ -1,11 +1,11 @@
 package lotto.handler
 
-import lotto.model.Account
+import lotto.service.AccountStore
 import lotto.view.InputView
 import lotto.view.OutputView
 
 class DepositHandler(
-    private val account: Account,
+    private val account: AccountStore,
     private val inputView: InputView,
     private val outputView: OutputView,
 ) : Handler {
