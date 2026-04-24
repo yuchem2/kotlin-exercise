@@ -22,7 +22,11 @@ object LottoStore {
                 try {
                     Json.decodeFromString<MutableList<LottoDraw>>(data)
                 } catch (e: Exception) {
-                    File(LOTTO_STORE_PATH).renameTo(File("$LOTTO_STORE_PATH.bak"))
+                    val file = File(LOTTO_STORE_PATH)
+                    val backup = File("$LOTTO_STORE_PATH.bak")
+                    file.renameTo(backup)
+
+                    println("파일이 손상되어 백업 후 초기화됨")
                     mutableListOf()
                 }
             }

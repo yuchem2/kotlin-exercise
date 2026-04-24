@@ -1,11 +1,11 @@
 package lotto.handler
 
-import lotto.model.Account
+import lotto.service.AccountStore
 import lotto.service.LottoService
 import lotto.view.OutputView
 
 class DrawHandler(
-    private val account: Account,
+    private val account: AccountStore,
     private val outputView: OutputView,
 ) : Handler {
     override fun handle() {

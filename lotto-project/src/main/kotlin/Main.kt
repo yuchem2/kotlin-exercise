@@ -4,7 +4,7 @@ import lotto.handler.DepositHandler
 import lotto.handler.DrawHandler
 import lotto.handler.HistoryHandler
 import lotto.handler.PurchaseHandler
-import lotto.model.Account
+import lotto.service.AccountStore
 import lotto.view.ConsoleInput
 import lotto.view.ConsoleOutput
 import lotto.view.InputView
@@ -18,7 +18,7 @@ private fun setupEncoding() {
 fun main() {
     setupEncoding()
 
-    val account = Account(0)
+    val accountStore = AccountStore()
     val inputView = InputView(ConsoleInput())
     val outputView = OutputView(ConsoleOutput())
 
@@ -26,10 +26,10 @@ fun main() {
         App(
             inputView,
             outputView,
-            accountHandler = AccountHandler(account, outputView),
-            depositHandler = DepositHandler(account, inputView, outputView),
-            purchaseHandler = PurchaseHandler(account, inputView, outputView),
-            drawHandler = DrawHandler(account, outputView),
+            accountHandler = AccountHandler(accountStore, outputView),
+            depositHandler = DepositHandler(accountStore, inputView, outputView),
+            purchaseHandler = PurchaseHandler(accountStore, inputView, outputView),
+            drawHandler = DrawHandler(accountStore, outputView),
             historyHandler = HistoryHandler(inputView, outputView),
         )
 
