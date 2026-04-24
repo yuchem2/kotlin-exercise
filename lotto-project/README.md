@@ -58,6 +58,8 @@ jar build/libs/lotto-project-1.0-SNAPSHOT.jar
 
 예) 총 20장 구매 시 `수동 3장 + 반자동 2장 + 자동 15장` 식으로 조합 가능. 자동만 구매하고 싶다면 수동/반자동 수량에 `0`을 입력합니다.
 
+티켓 생성 방식은 `TicketStrategy` 인터페이스로 추상화되어 있으며, 새 전략을 추가하려면 구현체를 하나 만들고 `PurchaseHandler.buildStrategies`에서 조립 규칙만 확장하면 됩니다.
+
 ## 회차 진행
 
 - 구매 시점에 진행 중인 회차가 없으면 새로운 회차가 생성됩니다.
@@ -93,18 +95,27 @@ lotto-project
         │   ├── PurchaseHandler.kt
         │   ├── DrawHandler.kt
         │   └── HistoryHandler.kt
-        ├── model
+        ├── model                        # 도메인 모델 + 일급 컬렉션
         │   ├── Account.kt
         │   ├── LottoTicket.kt
+        │   ├── LottoTickets.kt           # LottoTicket 일급 컬렉션
         │   ├── LottoDraw.kt
+        │   ├── LottoDraws.kt             # LottoDraw 일급 컬렉션
+        │   ├── WinningNumbers.kt         # 당첨 번호 + 보너스 (검증 응집)
         │   ├── LottoRank.kt
         │   └── Menu.kt
+        ├── strategy                     # 티켓 생성 전략 (전략 패턴)
+        │   ├── TicketStrategy.kt
+        │   ├── AutoStrategy.kt
+        │   ├── ManualStrategy.kt
+        │   └── SemiAutoStrategy.kt
         ├── service
-        │   ├── LottoService.kt         # 구매 / 추첨 유즈케이스
-        │   ├── LottoMachine.kt         # 티켓 생성기
-        │   ├── LottoStore.kt           # 회차 영속화
-        │   └── AccountStore.kt         # 계좌 영속화
-        ├── util/Extensions.kt          # 출력 포맷 유틸
+        │   ├── LottoService.kt           # 구매 / 추첨 유즈케이스
+        │   ├── LottoStore.kt             # 회차 영속화
+        │   ├── AccountStore.kt           # 계좌 영속화
+        │   ├── RandomNumberGenerator.kt  # 1~45 내 랜덤 번호 생성
+        │   └── WinningNumberGenerator.kt # 당첨 번호 생성
+        ├── util/Extensions.kt           # 출력 포맷 유틸
         └── view
             ├── InputView.kt
             └── OutputView.kt
@@ -118,11 +129,3 @@ lotto-project
 ./gradlew ktlintCheck   # 검사
 ./gradlew ktlintFormat  # 자동 포맷
 ```
-
-## 설계 원칙
-
-- 한 메서드는 한 역할만 담당하며 20줄을 넘기지 않도록 작성합니다.
-- 매직 넘버는 `constant/LottoConstants.kt`로 분리합니다.
-- 핸들러 / 서비스 / 뷰 / 모델 계층을 분리하여 책임을 명확히 구분합니다.
-- 입력 검증은 `InputView`의 `inputPositive` / `inputNonNegative`로 구분해 의미를 명시합니다.
-- 계좌에서 돈이 빠지기 전에 티켓을 먼저 생성해 예외 발생 시 금액이 손실되지 않도록 합니다.
