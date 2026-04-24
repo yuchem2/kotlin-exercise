@@ -6,6 +6,10 @@ import lotto.constant.TICKET_PRICE
 import lotto.constant.TICKET_SIZE
 import lotto.service.AccountStore
 import lotto.service.LottoService
+import lotto.strategy.AutoStrategy
+import lotto.strategy.ManualStrategy
+import lotto.strategy.SemiAutoStrategy
+import lotto.strategy.TicketStrategy
 import lotto.view.InputView
 import lotto.view.OutputView
 
@@ -21,7 +25,9 @@ class PurchaseHandler(
             val semiAutoCount = inputSemiAutoCount(count, manualCount)
             val manualTicketNumbers = inputManualTicketNumbers(manualCount)
             val semiAutoTicketNumbers = inputSemiAutoTicketNumbers(semiAutoCount)
-            LottoService.purchaseAndSave(account, count, manualTicketNumbers, semiAutoTicketNumbers)
+            val strategies = buildStrategies(count, manualTicketNumbers, semiAutoTicketNumbers)
+
+            LottoService.purchaseAndSave(account, strategies)
             outputView.printMessage("구매가 완료되었습니다.")
         } catch (e: IllegalArgumentException) {
             outputView.printError(e.message)
@@ -63,4 +69,12 @@ class PurchaseHandler(
             outputView.printGuidance("반자동 번호(${MIN_NUMBER}-${MAX_NUMBER}) ${TICKET_SIZE}개 미만 입력: ")
             inputView.inputManualTicketNumbers()
         }
+
+    private fun buildStrategies(
+        count: Int,
+        manualInputs: List<List<Int>>,
+        semiAutoInputs: List<List<Int>>,
+    ): List<TicketStrategy> =
+        manualInputs.map { ManualStrategy(it) } + semiAutoInputs.map { SemiAutoStrategy(it) } +
+            List(count - manualInputs.size - semiAutoInputs.size) { AutoStrategy() }
 }

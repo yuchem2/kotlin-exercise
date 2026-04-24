@@ -3,17 +3,14 @@ package lotto.service
 import lotto.constant.TICKET_PRICE
 import lotto.model.LottoDraw
 import lotto.model.LottoTickets
+import lotto.strategy.TicketStrategy
 
 object LottoService {
-    private val machine = LottoMachine
-
     fun purchaseAndSave(
         account: AccountStore,
-        count: Int,
-        manualNumbers: List<List<Int>>,
-        semiAutoNumbers: List<List<Int>>,
+        strategies: List<TicketStrategy>,
     ): LottoTickets {
-        val tickets = purchase(account, count, manualNumbers, semiAutoNumbers)
+        val tickets = purchase(account, strategies)
         val lastRound = LottoStore.getLast()
         if (lastRound == null || lastRound.isEnded()) {
             val draw = createDraw(LottoStore.getLastRound() + 1, tickets)
@@ -40,30 +37,12 @@ object LottoService {
 
     private fun purchase(
         account: AccountStore,
-        count: Int,
-        manualNumbers: List<List<Int>>,
-        semiAutoNumbers: List<List<Int>>,
+        strategies: List<TicketStrategy>,
     ): LottoTickets {
-        val price = count * TICKET_PRICE
+        val tickets = LottoTickets(strategies.map { it.create() })
 
-        val tickets =
-            List(count) { index ->
-                when {
-                    index < manualNumbers.size -> {
-                        machine.createManualTicket(manualNumbers[index])
-                    }
-
-                    index - manualNumbers.size < semiAutoNumbers.size -> {
-                        machine.createSemiAutoTicket(semiAutoNumbers[index - manualNumbers.size])
-                    }
-
-                    else -> {
-                        machine.createAutoTicket()
-                    }
-                }
-            }
-        account.withdraw(price)
-        return LottoTickets(tickets)
+        account.withdraw(strategies.size * TICKET_PRICE)
+        return tickets
     }
 
     private fun createDraw(
@@ -71,7 +50,5 @@ object LottoService {
         tickets: LottoTickets,
     ): LottoDraw = LottoDraw(round, tickets)
 
-    private fun endDraw(draw: LottoDraw) {
-        draw.endDraw(machine.drawing())
-    }
+    private fun endDraw(draw: LottoDraw) = draw.endDraw(WinningNumberGenerator.generate())
 }
