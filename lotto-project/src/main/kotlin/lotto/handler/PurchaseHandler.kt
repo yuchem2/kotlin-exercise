@@ -30,14 +30,14 @@ class PurchaseHandler(
 
     private fun inputCount(): Int {
         outputView.printGuidance("구매할 티켓의 양을 입력하세요: ")
-        val count = inputView.inputTicketCount()
+        val count = inputView.inputPositive()
         require(account.getAmount() >= count * TICKET_PRICE) { "소지한 금액보다 티켓 구매 비용이 많습니다." }
         return count
     }
 
     private fun inputManualCount(count: Int): Int {
         outputView.printGuidance("수동으로 입력할 티켓의 양을 입력하세요: ")
-        val manualCount = inputView.inputTicketCount()
+        val manualCount = inputView.inputNonNegative()
         require(manualCount <= count) { "입력한 총 티켓의 양보다 수동 입력 티켓의 양이 많습니다." }
         return manualCount
     }
@@ -47,7 +47,7 @@ class PurchaseHandler(
         manualCount: Int,
     ): Int {
         outputView.printGuidance("반자동으로 입력할 티켓의 양을 입력하세요: ")
-        val semiAutoCount = inputView.inputTicketCount()
+        val semiAutoCount = inputView.inputNonNegative()
         require(manualCount + semiAutoCount <= count) { "입력한 총 티켓의 양보다 수동 + 반자동 티켓의 양이 많습니다." }
         return semiAutoCount
     }

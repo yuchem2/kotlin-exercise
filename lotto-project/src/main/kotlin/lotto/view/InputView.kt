@@ -28,15 +28,15 @@ class InputView(
         return value
     }
 
-    fun inputAmount(): Int {
+    fun inputNonNegative(): Int {
         val value = inputNumber()
-        require(value >= 0) { "금액은 양수여야 합니다." }
+        require(value >= 0) { "0 이상의 수를 입력해주세요." }
         return value
     }
 
-    fun inputTicketCount(): Int {
+    fun inputPositive(): Int {
         val value = inputNumber()
-        require(value >= 0) { "티겟의 수는 양수여야 합니다." }
+        require(value > 0) { "1 이상의 수를 입력해주세요." }
         return value
     }
 

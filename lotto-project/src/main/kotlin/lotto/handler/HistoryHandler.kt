@@ -11,7 +11,7 @@ class HistoryHandler(
     override fun handle() {
         try {
             outputView.printGuidance("조회할 회차를 입력하세요(0: 전체): ")
-            val round = inputView.inputNumber()
+            val round = inputView.inputNonNegative()
             if (round == 0) printHistory() else printHistoryByRound(round)
         } catch (e: IllegalArgumentException) {
             outputView.printError(e.message)
@@ -28,7 +28,7 @@ class HistoryHandler(
     }
 
     private fun printHistoryByRound(round: Int) {
-        require(round > 0) { "회차 번호는 1보다 큰 양수여야 합니다." }
+        require(round > 0) { "회차 번호는 양수여야 합니다." }
 
         val history = LottoStore.getByRound(round)
         if (history == null) {
