@@ -21,7 +21,7 @@ class HistoryHandler(
     private fun printHistory() {
         val history = LottoStore.getAll()
         if (history.isNotEmpty()) {
-            outputView.printHistory(history.joinToString("\n"))
+            outputView.printHistory(history.toDisplayString())
         } else {
             outputView.printMessage("진행된 회차가 없습니다.")
         }
