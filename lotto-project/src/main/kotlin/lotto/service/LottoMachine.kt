@@ -13,8 +13,10 @@ internal object LottoMachine {
 
     fun createSemiAutoTicket(numbers: List<Int>): LottoTicket {
         require(numbers.size < TICKET_SIZE) { "반자동 번호는 ${TICKET_SIZE}개 미만이어야 합니다." }
-        val remaining = makeRandomNumbers(TICKET_SIZE - numbers.size, numbers)
+        require(numbers.isNotEmpty()) { "반자동 번호는 1개 이상이여야 합니다." }
+        require(numbers.all { it in MIN_NUMBER..MAX_NUMBER }) { "로또 번호는 ${MIN_NUMBER}와 $MAX_NUMBER 사이여야 합니다" }
 
+        val remaining = makeRandomNumbers(TICKET_SIZE - numbers.size, numbers)
         return LottoTicket(numbers + remaining)
     }
 

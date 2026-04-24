@@ -28,6 +28,8 @@ class HistoryHandler(
     }
 
     private fun printHistoryByRound(round: Int) {
+        require(round > 0) { "회차 번호는 1보다 큰 양수여야 합니다." }
+
         val history = LottoStore.getByRound(round)
         if (history == null) {
             outputView.printError("잘못된 회차 번호입니다.")
