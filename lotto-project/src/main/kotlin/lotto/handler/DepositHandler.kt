@@ -12,7 +12,7 @@ class DepositHandler(
     override fun handle() {
         try {
             outputView.printGuidance("입금할 금액을 입력하세요: ")
-            val amount = inputView.inputPositive()
+            val amount = inputView.inputPositive().toLong()
             account.deposit(amount)
             outputView.printBalance(account.getAmount())
         } catch (e: IllegalArgumentException) {

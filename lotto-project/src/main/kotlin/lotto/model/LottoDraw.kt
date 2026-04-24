@@ -6,7 +6,7 @@ import lotto.util.toFormattedString
 
 data class LottoResult(
     val result: Map<LottoRank, Int>,
-    val totalIncome: Int,
+    val totalIncome: Long,
 ) {
     override fun toString(): String {
         val str =
@@ -23,7 +23,7 @@ class LottoDraw(
     private var tickets: LottoTickets,
     private var winningNumbers: WinningNumbers? = null,
     private var result: Map<LottoRank, Int> = emptyMap(),
-    private var totalIncome: Int = 0,
+    private var totalIncome: Long = 0,
     private var isEnded: Boolean = false,
     private var finalTicketCount: Int = 0,
 ) {

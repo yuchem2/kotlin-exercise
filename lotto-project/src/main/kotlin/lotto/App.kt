@@ -8,7 +8,6 @@ import lotto.handler.PurchaseHandler
 import lotto.model.Menu
 import lotto.view.InputView
 import lotto.view.OutputView
-import kotlin.system.exitProcess
 
 class App(
     private val inputView: InputView,
@@ -35,12 +34,27 @@ class App(
 
     fun handleMenu(menu: Menu) {
         when (menu) {
-            Menu.ACCOUNT -> accountHandler.handle()
-            Menu.DEPOSIT -> depositHandler.handle()
-            Menu.PURCHASE -> purchaseHandler.handle()
-            Menu.DRAW -> drawHandler.handle()
-            Menu.HISTORY -> historyHandler.handle()
-            Menu.EXIT -> exitProcess(0)
+            Menu.ACCOUNT -> {
+                accountHandler.handle()
+            }
+
+            Menu.DEPOSIT -> {
+                depositHandler.handle()
+            }
+
+            Menu.PURCHASE -> {
+                purchaseHandler.handle()
+            }
+
+            Menu.DRAW -> {
+                drawHandler.handle()
+            }
+
+            Menu.HISTORY -> {
+                historyHandler.handle()
+            }
+
+            Menu.EXIT -> { /* 루프에서 break로 처리됨 */ }
         }
     }
 }

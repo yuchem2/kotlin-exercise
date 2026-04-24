@@ -1,8 +1,8 @@
 package lotto.util
 
-fun Int.toFormattedString(): String {
-    val billion = 100_000_000
-    val million = 10_000
+fun Long.toFormattedString(): String {
+    val billion = 100_000_000L
+    val million = 10_000L
 
     val billionPart = this / billion
     val millionPart = this % billion / million
@@ -29,6 +29,8 @@ fun Int.toFormattedString(): String {
         }
     }
 }
+
+fun Int.toFormattedString(): String = this.toLong().toFormattedString()
 
 fun String.padEndKo(length: Int): String {
     val koreanCount = this.count { it.code in 0xAC00..0xD7A3 }
