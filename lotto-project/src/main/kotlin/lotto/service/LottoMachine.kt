@@ -5,6 +5,7 @@ import lotto.constant.MAX_NUMBER
 import lotto.constant.MIN_NUMBER
 import lotto.constant.TICKET_SIZE
 import lotto.model.LottoTicket
+import lotto.model.WinningNumbers
 
 internal object LottoMachine {
     fun createAutoTicket(): LottoTicket = LottoTicket(makeRandomNumbers())
@@ -20,10 +21,10 @@ internal object LottoMachine {
         return LottoTicket(numbers + remaining)
     }
 
-    fun drawing(): Pair<LottoTicket, List<Int>> {
+    fun drawing(): WinningNumbers {
         val numbers = makeRandomNumbers(TICKET_SIZE + BONUS_COUNT)
         val (winnings, bonus) = numbers.chunked(TICKET_SIZE)
-        return Pair(createManualTicket(winnings), bonus)
+        return WinningNumbers(LottoTicket(winnings), bonus)
     }
 
     private fun makeRandomNumbers(
