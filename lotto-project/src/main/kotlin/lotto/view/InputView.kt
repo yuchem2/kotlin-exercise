@@ -28,14 +28,23 @@ class InputView(
         return value
     }
 
-    fun inputAmount() = inputNumber()
+    fun inputAmount(): Int {
+        val value = inputNumber()
+        require(value >= 0) { "금액은 양수여야 합니다." }
+        return value
+    }
 
-    fun inputTicketCount() = inputNumber()
+    fun inputTicketCount(): Int {
+        val value = inputNumber()
+        require(value >= 0) { "티겟의 수는 양수여야 합니다." }
+        return value
+    }
 
     fun inputManualTicketNumbers(): List<Int> {
         val values = input.readLine() ?: throw IllegalArgumentException("번호를 입력해주세요")
         return values
-            .split(" ")
+            .split(Regex("\\s+"))
+            .filter { it.isNotBlank() }
             .map { it.toIntOrNull() ?: throw IllegalArgumentException("숫자를 입력해주세요.") }
     }
 }

@@ -50,7 +50,7 @@ class LottoDraw(
         if (isEnded) return
 
         tickets
-            .groupBy { getRank(it.compare(winningNumbers), it.hasBonusNumbers(bonusNumbers)) }
+            .groupBy { getRank(it.countMatch(winningNumbers), it.countBonusMatches(bonusNumbers)) }
             .forEach { (rank, list) -> result[rank] = list.size }
 
         totalIncome = result.entries.fold(0) { acc, (rank, count) -> acc + rank.prize * count }

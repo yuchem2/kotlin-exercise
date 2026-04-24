@@ -44,29 +44,30 @@ object LottoService {
     ): List<LottoTicket> {
         val price = count * TICKET_PRICE
 
-        account.withdraw(price)
-        return List(count) { index ->
-            when {
-                index < manualNumbers.size -> {
-                    machine.createManualTicket(manualNumbers[index])
-                }
+        val tickets =
+            List(count) { index ->
+                when {
+                    index < manualNumbers.size -> {
+                        machine.createManualTicket(manualNumbers[index])
+                    }
 
-                index - manualNumbers.size < semiAutoNumbers.size -> {
-                    machine
-                        .createSemiAutoTicket(semiAutoNumbers[index - manualNumbers.size])
-                }
+                    index - manualNumbers.size < semiAutoNumbers.size -> {
+                        machine.createSemiAutoTicket(semiAutoNumbers[index - manualNumbers.size])
+                    }
 
-                else -> {
-                    machine.createAutoTicket()
+                    else -> {
+                        machine.createAutoTicket()
+                    }
                 }
             }
-        }
+        account.withdraw(price)
+        return tickets
     }
 
     private fun createDraw(
         round: Int,
         tickets: List<LottoTicket>,
-    ): LottoDraw = LottoDraw(round, tickets as MutableList<LottoTicket>)
+    ): LottoDraw = LottoDraw(round, tickets.toMutableList())
 
     private fun endDraw(draw: LottoDraw) {
         val (winnings, bonus) = machine.drawing()
