@@ -4,10 +4,11 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import lotto.constant.LOTTO_STORE_PATH
 import lotto.model.LottoDraw
+import lotto.model.LottoDraws
 import java.io.File
 
 object LottoStore {
-    private var draws: MutableList<LottoDraw>
+    private var draws: LottoDraws = LottoDraws(emptyList())
 
     init {
         val data =
@@ -17,17 +18,17 @@ object LottoStore {
 
         draws =
             if (data == null) {
-                mutableListOf()
+                LottoDraws(emptyList())
             } else {
                 try {
-                    Json.decodeFromString<MutableList<LottoDraw>>(data)
+                    Json.decodeFromString<LottoDraws>(data)
                 } catch (e: Exception) {
                     val file = File(LOTTO_STORE_PATH)
                     val backup = File("$LOTTO_STORE_PATH.bak")
                     file.renameTo(backup)
 
                     println("파일이 손상되어 백업 후 초기화됨")
-                    mutableListOf()
+                    LottoDraws(emptyList())
                 }
             }
     }
@@ -39,21 +40,21 @@ object LottoStore {
     }
 
     fun save(draw: LottoDraw) {
-        draws.add(draw)
+        draws = draws.append(draw)
         persist()
     }
 
     fun updateLast(draw: LottoDraw) {
         if (draws.isEmpty()) return
-        draws[draws.lastIndex] = draw
+        draws = draws.updateLast(draw)
         persist()
     }
 
-    fun getLastRound(): Int = draws.maxOfOrNull { it.round } ?: 0
+    fun getLastRound(): Int = draws.lastRound()
 
-    fun getAll(): List<LottoDraw> = draws.toList()
+    fun getAll(): LottoDraws = draws
 
-    fun getByRound(round: Int): LottoDraw? = draws.find { it.round == round }
+    fun getByRound(round: Int): LottoDraw? = draws.findByRound(round)
 
-    fun getLast(): LottoDraw? = draws.lastOrNull()
+    fun getLast(): LottoDraw? = draws.last()
 }
