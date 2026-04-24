@@ -31,7 +31,9 @@ object LottoService {
 
         endDraw(lastRound)
         LottoStore.updateLast(lastRound)
-        account.deposit(lastRound.getResult().totalIncome)
+
+        val income = lastRound.getResult().totalIncome
+        if (income > 0) account.deposit(income)
 
         return lastRound
     }
