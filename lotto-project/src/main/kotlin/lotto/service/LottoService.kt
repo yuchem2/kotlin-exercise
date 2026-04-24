@@ -2,7 +2,7 @@ package lotto.service
 
 import lotto.constant.TICKET_PRICE
 import lotto.model.LottoDraw
-import lotto.model.LottoTicket
+import lotto.model.LottoTickets
 
 object LottoService {
     private val machine = LottoMachine
@@ -12,7 +12,7 @@ object LottoService {
         count: Int,
         manualNumbers: List<List<Int>>,
         semiAutoNumbers: List<List<Int>>,
-    ): List<LottoTicket> {
+    ): LottoTickets {
         val tickets = purchase(account, count, manualNumbers, semiAutoNumbers)
         val lastRound = LottoStore.getLast()
         if (lastRound == null || lastRound.isEnded()) {
@@ -43,7 +43,7 @@ object LottoService {
         count: Int,
         manualNumbers: List<List<Int>>,
         semiAutoNumbers: List<List<Int>>,
-    ): List<LottoTicket> {
+    ): LottoTickets {
         val price = count * TICKET_PRICE
 
         val tickets =
@@ -63,16 +63,15 @@ object LottoService {
                 }
             }
         account.withdraw(price)
-        return tickets
+        return LottoTickets(tickets)
     }
 
     private fun createDraw(
         round: Int,
-        tickets: List<LottoTicket>,
-    ): LottoDraw = LottoDraw(round, tickets.toMutableList())
+        tickets: LottoTickets,
+    ): LottoDraw = LottoDraw(round, tickets)
 
     private fun endDraw(draw: LottoDraw) {
-        val (winnings, bonus) = machine.drawing()
-        draw.endDraw(winnings, bonus)
+        draw.endDraw(machine.drawing())
     }
 }

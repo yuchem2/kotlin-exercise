@@ -1,8 +1,6 @@
 package lotto.model
 
 import kotlinx.serialization.Serializable
-import lotto.constant.BONUS_COUNT
-import lotto.constant.TICKET_SIZE
 import lotto.util.padEndKo
 import lotto.util.toFormattedString
 
@@ -22,56 +20,35 @@ data class LottoResult(
 @Serializable
 class LottoDraw(
     val round: Int,
-    private val tickets: MutableList<LottoTicket>,
-    private var winningNumbers: LottoTicket? = null,
-    private var bonusNumbers: List<Int>? = null,
-    private val result: MutableMap<LottoRank, Int> = mutableMapOf(),
+    private var tickets: LottoTickets,
+    private var winningNumbers: WinningNumbers? = null,
+    private var result: Map<LottoRank, Int> = emptyMap(),
     private var totalIncome: Int = 0,
     private var isEnded: Boolean = false,
-    private var ticketCount: Int = 0,
+    private var finalTicketCount: Int = 0,
 ) {
     init {
-        ticketCount = tickets.size
+        finalTicketCount = tickets.size
     }
-
-    private fun getRank(
-        matchNumbers: Int,
-        matchBonusNumbers: Int,
-    ): LottoRank =
-        when (matchNumbers) {
-            TICKET_SIZE -> LottoRank.FIRST
-            TICKET_SIZE - 1 -> if (matchBonusNumbers == BONUS_COUNT) LottoRank.SECOND else LottoRank.THIRD
-            TICKET_SIZE - 2 -> LottoRank.FOURTH
-            TICKET_SIZE - 3 -> LottoRank.FIFTH
-            else -> LottoRank.LOSE
-        }
 
     fun setResult() {
         if (isEnded) return
+        val winning = winningNumbers ?: return
 
-        tickets
-            .groupBy { getRank(it.countMatch(winningNumbers), it.countBonusMatches(bonusNumbers)) }
-            .forEach { (rank, list) -> result[rank] = list.size }
-
+        result = tickets.groupByRank(winning)
         totalIncome = result.entries.fold(0) { acc, (rank, count) -> acc + rank.prize * count }
+        this.tickets = LottoTickets(emptyList())
         isEnded = true
-        tickets.clear()
     }
 
-    fun addTicket(tickets: List<LottoTicket>) {
+    fun addTicket(tickets: LottoTickets) {
         if (isEnded) return
-        this.tickets.addAll(tickets)
-        ticketCount = this.tickets.size
+        this.tickets += tickets
+        finalTicketCount = this.tickets.size
     }
 
-    fun endDraw(
-        winningNumbers: LottoTicket,
-        bonusNumbers: List<Int>,
-    ) {
-        require(bonusNumbers.size == BONUS_COUNT) { "보너스 숫자는 ${BONUS_COUNT}개여야 합니다." }
-        require(!winningNumbers.numbers.toSet().containsAll(bonusNumbers)) { "보너스 숫자는 당첨번호에 없는 숫자여야 합니다." }
+    fun endDraw(winningNumbers: WinningNumbers) {
         this.winningNumbers = winningNumbers
-        this.bonusNumbers = bonusNumbers
         setResult()
     }
 
@@ -81,7 +58,7 @@ class LottoDraw(
 
     override fun toString(): String =
         if (isEnded) {
-            "#$round".padEndKo(6) + ticketCount.toFormattedString().padEndKo(8) + getResult().toString()
+            "#$round".padEndKo(6) + finalTicketCount.toFormattedString().padEndKo(8) + getResult().toString()
         } else {
             "#$round".padEndKo(6) + "진행 중".padEndKo(8)
         }
@@ -90,7 +67,7 @@ class LottoDraw(
         if (isEnded) {
             buildString {
                 appendLine("회차: $round")
-                appendLine("총 티켓: ${ticketCount.toFormattedString()}")
+                appendLine("총 티켓: ${finalTicketCount.toFormattedString()}")
                 appendLine("─────────────────")
                 LottoRank.entries
                     .filter { it != LottoRank.LOSE }
@@ -104,7 +81,7 @@ class LottoDraw(
         } else {
             buildString {
                 appendLine("회차: $round")
-                appendLine("총 티켓: ${tickets.size.toFormattedString()}")
+                appendLine("총 티켓: ${finalTicketCount.toFormattedString()}")
                 appendLine("아직 진행 중인 회차입니다.")
             }
         }
