@@ -10,7 +10,7 @@ object LottoService {
         account: AccountStore,
         strategies: List<TicketStrategy>,
     ): LottoTickets {
-        val tickets = purchase(account, strategies)
+        val tickets = createTickets(strategies)
         val lastRound = LottoStore.getLast()
         if (lastRound == null || lastRound.isEnded()) {
             val draw = createDraw(LottoStore.getLastRound() + 1, tickets)
@@ -19,6 +19,10 @@ object LottoService {
             lastRound.addTicket(tickets)
             LottoStore.updateLast(lastRound)
         }
+
+        val income: Long = strategies.size * TICKET_PRICE.toLong()
+        account.withdraw(income)
+
         return tickets
     }
 
@@ -35,15 +39,7 @@ object LottoService {
         return lastRound
     }
 
-    private fun purchase(
-        account: AccountStore,
-        strategies: List<TicketStrategy>,
-    ): LottoTickets {
-        val tickets = LottoTickets(strategies.map { it.create() })
-
-        account.withdraw(strategies.size * TICKET_PRICE)
-        return tickets
-    }
+    private fun createTickets(strategies: List<TicketStrategy>): LottoTickets = LottoTickets(strategies.map { it.create() })
 
     private fun createDraw(
         round: Int,

@@ -20,7 +20,7 @@ class AccountStore {
                 0
             } else {
                 try {
-                    Json.decodeFromString<Int>(data)
+                    Json.decodeFromString<Long>(data)
                 } catch (e: Exception) {
                     val file = File(ACCOUNT_STORE_PATH)
                     val backup = File("$ACCOUNT_STORE_PATH.bak")
@@ -40,12 +40,12 @@ class AccountStore {
 
     fun getAmount() = account.getAmount()
 
-    fun deposit(amount: Int) {
+    fun deposit(amount: Long) {
         account.deposit(amount)
         persist()
     }
 
-    fun withdraw(amount: Int) {
+    fun withdraw(amount: Long) {
         account.withdraw(amount)
         persist()
     }

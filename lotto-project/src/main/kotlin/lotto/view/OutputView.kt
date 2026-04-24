@@ -41,7 +41,7 @@ class OutputView(
     fun printError(message: String?) = output.println("[ERROR] ${message ?: "예기치 못한 오류입니다."}")
 
     fun printDrawHeader() {
-        val output =
+        val header =
             buildString {
                 append("회차".padEndKo(6))
                 append("총티켓".padEndKo(14))
@@ -53,7 +53,7 @@ class OutputView(
                 append("낙첨".padEndKo(16))
                 append("총수익".padEndKo(20))
             }
-        println(output)
+        output.println(header)
     }
 
     fun printHistory(message: String) {
@@ -63,7 +63,7 @@ class OutputView(
         output.println("=".repeat(120))
     }
 
-    fun printBalance(amount: Int) {
+    fun printBalance(amount: Long) {
         output.println("현재 잔액: ${amount.toFormattedString()}원")
     }
 }
