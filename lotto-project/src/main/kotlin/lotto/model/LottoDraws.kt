@@ -6,6 +6,8 @@ import kotlinx.serialization.Serializable
 class LottoDraws(
     private val draws: List<LottoDraw>,
 ) {
+    constructor() : this(emptyList())
+
     fun lastRound(): Int = draws.maxOfOrNull { it.round } ?: 0
 
     fun findByRound(round: Int): LottoDraw? = draws.find { it.round == round }

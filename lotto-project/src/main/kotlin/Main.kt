@@ -4,7 +4,10 @@ import lotto.handler.DepositHandler
 import lotto.handler.DrawHandler
 import lotto.handler.HistoryHandler
 import lotto.handler.PurchaseHandler
-import lotto.service.AccountStore
+import lotto.repository.AccountRepository
+import lotto.repository.LottoDrawRepository
+import lotto.service.AccountService
+import lotto.service.LottoService
 import lotto.view.InputView
 import lotto.view.OutputView
 import java.io.PrintStream
@@ -17,7 +20,10 @@ private fun setupEncoding() {
 fun main() {
     setupEncoding()
 
-    val accountStore = AccountStore()
+    val accountRepository = AccountRepository()
+    val drawRepository = LottoDrawRepository()
+    val accountService = AccountService(accountRepository)
+    val lottoService = LottoService(accountService, drawRepository)
     val inputView = InputView()
     val outputView = OutputView()
 
@@ -25,11 +31,11 @@ fun main() {
         App(
             inputView,
             outputView,
-            accountHandler = AccountHandler(accountStore, outputView),
-            depositHandler = DepositHandler(accountStore, inputView, outputView),
-            purchaseHandler = PurchaseHandler(accountStore, inputView, outputView),
-            drawHandler = DrawHandler(accountStore, outputView),
-            historyHandler = HistoryHandler(inputView, outputView),
+            accountHandler = AccountHandler(accountService, outputView),
+            depositHandler = DepositHandler(accountService, inputView, outputView),
+            purchaseHandler = PurchaseHandler(lottoService, inputView, outputView),
+            drawHandler = DrawHandler(lottoService, outputView),
+            historyHandler = HistoryHandler(lottoService, inputView, outputView),
         )
 
     app.run()

@@ -1,16 +1,14 @@
 package lotto.handler
 
-import lotto.constant.TICKET_PRICE
 import lotto.model.LottoNumber
 import lotto.model.LottoNumbers
-import lotto.service.AccountStore
 import lotto.service.LottoService
 import lotto.strategy.NumberStrategy
 import lotto.view.InputView
 import lotto.view.OutputView
 
 class PurchaseHandler(
-    private val account: AccountStore,
+    private val lottoService: LottoService,
     private val inputView: InputView,
     private val outputView: OutputView,
 ) : Handler {
@@ -26,7 +24,7 @@ class PurchaseHandler(
                     buildSemiAutoStrategies(semiAutoCount) +
                     List(autoCount) { NumberStrategy.auto() }
 
-            LottoService.purchaseAndSave(account, strategies)
+            lottoService.purchaseAndSave(strategies)
             outputView.printMessage("구매가 완료되었습니다.")
         } catch (e: IllegalArgumentException) {
             outputView.printError(e.message)
@@ -36,7 +34,6 @@ class PurchaseHandler(
     private fun inputCount(): Int {
         outputView.printGuidance("구매할 티켓의 양을 입력하세요: ")
         val count = inputView.inputPositive()
-        require(account.getAmount() >= count * TICKET_PRICE) { "소지한 금액보다 티켓 구매 비용이 많습니다." }
         return count
     }
 

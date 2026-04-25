@@ -1,10 +1,11 @@
 package lotto.handler
 
-import lotto.service.LottoStore
+import lotto.service.LottoService
 import lotto.view.InputView
 import lotto.view.OutputView
 
 class HistoryHandler(
+    private val lottoService: LottoService,
     private val inputView: InputView,
     private val outputView: OutputView,
 ) : Handler {
@@ -19,7 +20,7 @@ class HistoryHandler(
     }
 
     private fun printHistory() {
-        val history = LottoStore.getAll()
+        val history = lottoService.getAllHistory()
         if (history.isNotEmpty()) {
             outputView.printHistory(history.toDisplayString())
         } else {
@@ -30,7 +31,7 @@ class HistoryHandler(
     private fun printHistoryByRound(round: Int) {
         require(round > 0) { "회차 번호는 양수여야 합니다." }
 
-        val history = LottoStore.getByRound(round)
+        val history = lottoService.getHistoryByRound(round)
         if (history == null) {
             outputView.printError("잘못된 회차 번호입니다.")
         } else {
