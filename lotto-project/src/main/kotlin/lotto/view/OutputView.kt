@@ -4,41 +4,20 @@ import lotto.model.Menu
 import lotto.util.padEndKo
 import lotto.util.toFormattedString
 
-interface OutputPort {
-    fun print(message: String)
-
-    fun println(message: String)
-
-    fun printMenu(items: List<String>)
-}
-
-class ConsoleOutput : OutputPort {
-    override fun print(message: String) = kotlin.io.print(message)
-
-    override fun println(message: String) = kotlin.io.println(message)
-
-    override fun printMenu(items: List<String>) = items.forEach { println(it) }
-}
-
-class OutputView(
-    private val output: OutputPort,
-) {
+class OutputView {
     fun printWelcome() {
-        output.println("==========================")
-        output.println("      로또 시스템        ")
-        output.println("==========================")
+        println("==========================")
+        println("      로또 시스템        ")
+        println("==========================")
     }
 
-    fun printMenu() {
-        val items = Menu.entries.map { "${it.number}. ${it.description}" }
-        output.printMenu(items)
-    }
+    fun printMenu() = Menu.entries.map { "${it.number}. ${it.description}" }.forEach { println(it) }
 
-    fun printGuidance(message: String) = output.print(message)
+    fun printGuidance(message: String) = print(message)
 
-    fun printMessage(message: String) = output.println(message)
+    fun printMessage(message: String) = println(message)
 
-    fun printError(message: String?) = output.println("[ERROR] ${message ?: "예기치 못한 오류입니다."}")
+    fun printError(message: String?) = println("[ERROR] ${message ?: "예기치 못한 오류입니다."}")
 
     fun printDrawHeader() {
         val header =
@@ -53,17 +32,17 @@ class OutputView(
                 append("낙첨".padEndKo(16))
                 append("총수익".padEndKo(20))
             }
-        output.println(header)
+        println(header)
     }
 
     fun printHistory(message: String) {
-        output.println("=".repeat(120))
+        println("=".repeat(120))
         printDrawHeader()
-        output.println(message)
-        output.println("=".repeat(120))
+        println(message)
+        println("=".repeat(120))
     }
 
     fun printBalance(amount: Long) {
-        output.println("현재 잔액: ${amount.toFormattedString()}원")
+        println("현재 잔액: ${amount.toFormattedString()}원")
     }
 }
