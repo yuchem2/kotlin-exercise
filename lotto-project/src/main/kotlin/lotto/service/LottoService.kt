@@ -2,53 +2,53 @@ package lotto.service
 
 import lotto.constant.TICKET_PRICE
 import lotto.model.LottoDraw
+import lotto.model.LottoDraws
 import lotto.model.LottoNumbers
 import lotto.model.LottoTickets
+import lotto.repository.LottoDrawRepository
 import lotto.strategy.NumberStrategy
 
-object LottoService {
-    fun purchaseAndSave(
-        account: AccountStore,
-        strategies: List<NumberStrategy>,
-    ): LottoTickets {
+class LottoService(
+    private val accountService: AccountService,
+    private val drawRepository: LottoDrawRepository,
+) {
+    fun purchaseAndSave(strategies: List<NumberStrategy>): LottoTickets {
         val tickets = createTickets(strategies)
-        val lastRound = LottoStore.getLast()
-        if (lastRound == null || lastRound.isEnded()) {
-            val draw = createDraw(LottoStore.getLastRound() + 1, tickets)
-            LottoStore.save(draw)
-        } else {
-            lastRound.addTicket(tickets)
-            LottoStore.updateLast(lastRound)
-        }
 
-        val income: Long = strategies.size * TICKET_PRICE
-        account.withdraw(income)
+        val draws = drawRepository.load()
+        val lastDraw = draws.last()
+        val updateDraws =
+            if (lastDraw == null || lastDraw.isEnded()) {
+                draws.append(LottoDraw(draws.lastRound() + 1, tickets))
+            } else {
+                lastDraw.addTicket(tickets)
+                draws.updateLast(lastDraw)
+            }
+        accountService.withdraw(strategies.size * TICKET_PRICE)
+        drawRepository.save(updateDraws)
 
         return tickets
     }
 
-    fun endAndSave(account: AccountStore): LottoDraw? {
-        val lastRound = LottoStore.getLast()
-        if (lastRound == null || lastRound.isEnded()) return null
+    fun endAndSave(): LottoDraw? {
+        val draws = drawRepository.load()
+        val lastDraw = draws.last() ?: return null
+        if (lastDraw.isEnded()) return null
 
-        endDraw(lastRound)
-        LottoStore.updateLast(lastRound)
+        lastDraw.endDraw(WinningNumberGenerator.generate())
+        drawRepository.save(draws.updateLast(lastDraw))
 
-        val income = lastRound.getResult().totalIncome
-        if (income > 0) account.deposit(income)
+        val income = lastDraw.getResult().totalIncome
+        if (income > 0) {
+            accountService.deposit(income)
+        }
 
-        return lastRound
+        return lastDraw
     }
 
-    private fun createTickets(strategies: List<NumberStrategy>): LottoTickets {
-        val tickets = strategies.map { LottoNumbers(it.pick()) }
-        return LottoTickets(tickets)
-    }
+    fun getAllHistory(): LottoDraws = drawRepository.load()
 
-    private fun createDraw(
-        round: Int,
-        tickets: LottoTickets,
-    ): LottoDraw = LottoDraw(round, tickets)
+    fun getHistoryByRound(round: Int): LottoDraw? = drawRepository.load().findByRound(round)
 
-    private fun endDraw(draw: LottoDraw) = draw.endDraw(WinningNumberGenerator.generate())
+    private fun createTickets(strategies: List<NumberStrategy>): LottoTickets = LottoTickets(strategies.map { LottoNumbers(it.pick()) })
 }
