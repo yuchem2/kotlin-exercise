@@ -5,8 +5,6 @@ import lotto.handler.DrawHandler
 import lotto.handler.HistoryHandler
 import lotto.handler.PurchaseHandler
 import lotto.service.AccountStore
-import lotto.view.ConsoleInput
-import lotto.view.ConsoleOutput
 import lotto.view.InputView
 import lotto.view.OutputView
 
@@ -19,8 +17,8 @@ fun main() {
     setupEncoding()
 
     val accountStore = AccountStore()
-    val inputView = InputView(ConsoleInput())
-    val outputView = OutputView(ConsoleOutput())
+    val inputView = InputView()
+    val outputView = OutputView()
 
     val app =
         App(
@@ -33,9 +31,5 @@ fun main() {
             historyHandler = HistoryHandler(inputView, outputView),
         )
 
-    try {
-        app.run()
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
+    app.run()
 }
