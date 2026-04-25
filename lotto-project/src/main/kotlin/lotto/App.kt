@@ -23,9 +23,10 @@ class App(
             try {
                 outputView.printWelcome()
                 outputView.printMenu()
-                val menu = inputView.inputMenu()
-                if (menu == Menu.EXIT) break
-                handleMenu(menu)
+                when (val menu = inputView.inputMenu()) {
+                    Menu.EXIT -> break
+                    else -> handleMenu(menu)
+                }
             } catch (e: IllegalArgumentException) {
                 outputView.printError(e.message ?: "잘못된 입력입니다.")
             }
@@ -54,7 +55,9 @@ class App(
                 historyHandler.handle()
             }
 
-            Menu.EXIT -> { /* 루프에서 break로 처리됨 */ }
+            Menu.EXIT -> {
+                throw IllegalStateException("도달 불가")
+            }
         }
     }
 }

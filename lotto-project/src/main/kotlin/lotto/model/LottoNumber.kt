@@ -9,7 +9,7 @@ value class LottoNumber(
     val number: Int,
 ) {
     init {
-        require(number in MIN..MAX) { "로또 번호는 ${MIN}와 $MAX 사이여야 합니다" }
+        require(number in MIN..MAX) { "로또 번호는 ${MIN}과 $MAX 사이여야 합니다" }
     }
 
     companion object {

@@ -4,12 +4,13 @@ import lotto.model.LottoNumber
 import lotto.model.LottoNumbers
 
 object RandomNumberGenerator {
+    private val ALL_NUMBERS = (LottoNumber.MIN..LottoNumber.MAX).map { LottoNumber(it) }
+
     fun pick(
         count: Int = LottoNumbers.Full.SIZE,
         filter: List<LottoNumber> = emptyList(),
     ): List<LottoNumber> =
-        (LottoNumber.MIN..LottoNumber.MAX)
-            .map { LottoNumber(it) }
+        ALL_NUMBERS
             .filter { it !in filter }
             .shuffled()
             .take(count)
