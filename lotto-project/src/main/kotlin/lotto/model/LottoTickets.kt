@@ -3,7 +3,8 @@ package lotto.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-class LottoTickets(
+@JvmInline
+value class LottoTickets(
     private val tickets: List<LottoTicket>,
 ) {
     val size: Int get() = tickets.size
