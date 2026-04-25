@@ -26,6 +26,7 @@ class AccountStore {
                     val backup = File("$ACCOUNT_STORE_PATH.bak")
                     file.renameTo(backup)
 
+                    println("파일이 손상되어 백업 후 초기화됨")
                     0
                 }
             }

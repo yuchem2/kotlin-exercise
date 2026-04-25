@@ -33,10 +33,6 @@ class LottoDraw(
         finalTicketCount = tickets.size,
     )
 
-    init {
-        finalTicketCount = tickets.size
-    }
-
     fun setResult() {
         if (isEnded) return
 
