@@ -58,7 +58,7 @@ jar build/libs/lotto-project-1.0-SNAPSHOT.jar
 
 예) 총 20장 구매 시 `수동 3장 + 반자동 2장 + 자동 15장` 식으로 조합 가능. 자동만 구매하고 싶다면 수동/반자동 수량에 `0`을 입력합니다.
 
-티켓 생성 방식은 `NumberStrategy` 인터페이스로 추상화되어 있고, `LottoTicket.create(strategy)`가 Context 역할을 맡아 strategy가 고른 번호로 티켓을 조립합니다. 구현체(`Manual`/`SemiAuto`/`Auto`)는 `internal`로 캡슐화되어 모듈 외부에서는 추상에만 의존합니다. 새 전략을 추가하려면 `NumberStrategy` 구현체를 하나 만들고 `PurchaseHandler.buildStrategies`에서 조립 규칙만 확장하면 됩니다.
+티켓 생성 방식은 `NumberStrategy` 인터페이스로 추상화되어 있습니다. 구현체(`Manual`/`SemiAuto`/`Auto`)는 `internal`로 캡슐화되어 모듈 외부에서는 추상에만 의존하며, `LottoService`가 strategy가 고른 번호를 `LottoNumbers`로 감싸 `LottoTickets`로 조립합니다. 새 전략을 추가하려면 `NumberStrategy` 구현체를 하나 만들고 `PurchaseHandler`의 전략 조립부에 추가하면 됩니다.
 
 ## 회차 진행
 
@@ -84,9 +84,9 @@ lotto-project
 ├── build.gradle.kts
 ├── settings.gradle.kts
 └── src/main/kotlin
-    ├── Main.kt
+    ├── Main.kt                         # 의존성 조립 (Composition Root)
     └── lotto
-        ├── App.kt                      # 메뉴 루프
+        ├── App.kt                      # 메뉴 루프 / 핸들러 디스패치
         ├── constant/LottoConstants.kt  # 티켓 가격 / 영속화 경로
         ├── handler                     # 메뉴별 핸들러 (단일 책임)
         │   ├── Handler.kt
@@ -95,30 +95,35 @@ lotto-project
         │   ├── PurchaseHandler.kt
         │   ├── DrawHandler.kt
         │   └── HistoryHandler.kt
-        ├── model                        # 도메인 모델 + 일급 컬렉션
+        ├── model                        # 도메인 모델 + 일급 컬렉션 + 도메인 서비스
         │   ├── Account.kt
         │   ├── LottoNumber.kt            # LottoNumber + LottoNumbers value class
         │   ├── LottoTickets.kt           # LottoNumbers 일급 컬렉션 (inline value class)
         │   ├── LottoDraw.kt
         │   ├── LottoDraws.kt             # LottoDraw 일급 컬렉션
-        │   ├── WinningNumbers.kt         # 당첨 번호 + 보너스
-        │   ├── LottoRank.kt              # 등수 + 상금 + matchCount/requiredBonus
-        │   └── Menu.kt                   # Menu.from() 팩토리 포함
+        │   ├── WinningNumbers.kt         # 당첨 번호 + 보너스 (순수 VO)
+        │   ├── Matcher.kt                # 매칭 규칙 (Domain Service)
+        │   └── LottoRank.kt              # 등수 + 상금 + matchCount/requiredBonus
         ├── strategy                     # 번호 선택 전략
         │   ├── NumberStrategy.kt         # 추상
         │   ├── Auto.kt                   # internal — 6개 자동 생성
         │   ├── Manual.kt                 # internal — 입력 6개 그대로
         │   └── SemiAuto.kt               # internal — 1~5개 입력 + 자동 채움
-        ├── service
-        │   ├── LottoService.kt           # 구매 / 추첨 유즈케이스
-        │   ├── LottoStore.kt             # 회차 영속화
-        │   ├── AccountStore.kt           # 계좌 영속화
+        ├── generator                    # 번호 생성 도구
         │   ├── RandomNumberGenerator.kt  # 1~45 내 랜덤 번호 생성
-        │   └── WinningNumberGenerator.kt # 당첨 번호 생성
+        │   └── WinningNumberGenerator.kt # 당첨 번호 + 보너스 생성
+        ├── repository                   # 영속성 계층
+        │   ├── JsonFileStorage.kt        # JSON 파일 I/O 일반화
+        │   ├── AccountRepository.kt      # 계좌 영속화
+        │   └── LottoDrawRepository.kt    # 회차 영속화 (메모리 캐시 포함)
+        ├── service                      # 비즈니스 흐름
+        │   ├── AccountService.kt         # 입출금 흐름
+        │   └── LottoService.kt           # 구매 / 추첨 / 조회 유즈케이스
         ├── util/Extensions.kt           # 출력 포맷 유틸
         └── view
             ├── InputView.kt
-            └── OutputView.kt
+            ├── OutputView.kt
+            └── Menu.kt                   # Menu.from() 팩토리 포함
 ```
 
 ## 코드 스타일
