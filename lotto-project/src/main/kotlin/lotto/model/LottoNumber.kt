@@ -1,7 +1,6 @@
 package lotto.model
 
 import kotlinx.serialization.Serializable
-import lotto.strategy.NumberStrategy
 
 @Serializable
 @JvmInline

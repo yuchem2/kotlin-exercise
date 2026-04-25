@@ -6,12 +6,12 @@ import kotlinx.serialization.Serializable
 @JvmInline
 value class LottoTickets(
     private val tickets: List<LottoNumbers>,
-) {
+) : Iterable<LottoNumbers> {
     constructor() : this(emptyList())
 
     val size: Int get() = tickets.size
 
-    operator fun plus(other: LottoTickets) = LottoTickets(tickets + other.tickets)
+    override fun iterator(): Iterator<LottoNumbers> = tickets.iterator()
 
-    fun groupByRank(winning: WinningNumbers): Map<LottoRank, Int> = tickets.groupBy { winning.rankOf(it) }.mapValues { it.value.size }
+    operator fun plus(other: LottoTickets) = LottoTickets(tickets + other.tickets)
 }
