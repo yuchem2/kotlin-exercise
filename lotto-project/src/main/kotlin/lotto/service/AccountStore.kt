@@ -35,10 +35,10 @@ class AccountStore {
     fun persist() {
         val file = File(ACCOUNT_STORE_PATH)
         file.parentFile?.mkdirs()
-        file.writeText(Json.encodeToString(account.getAmount()))
+        file.writeText(Json.encodeToString(account.amount))
     }
 
-    fun getAmount() = account.getAmount()
+    fun getAmount() = account.amount
 
     fun deposit(amount: Long) {
         account.deposit(amount)

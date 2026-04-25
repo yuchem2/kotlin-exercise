@@ -33,9 +33,8 @@ class LottoDraw(
 
     fun setResult() {
         if (isEnded) return
-        val winning = winningNumbers ?: return
 
-        result = tickets.groupByRank(winning)
+        tickets.groupByRank(winningNumbers ?: return)
         totalIncome = result.entries.fold(0) { acc, (rank, count) -> acc + rank.prize * count }
         this.tickets = LottoTickets(emptyList())
         isEnded = true
