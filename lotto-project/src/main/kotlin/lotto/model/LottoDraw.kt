@@ -36,7 +36,7 @@ class LottoDraw(
     fun setResult() {
         if (isEnded) return
 
-        result = tickets.groupByRank(winningNumbers ?: return)
+        result = Matcher(winningNumbers ?: return).groupByRank(tickets)
         totalIncome = result.entries.fold(0) { acc, (rank, count) -> acc + rank.prize * count }
         this.tickets = LottoTickets()
         isEnded = true
