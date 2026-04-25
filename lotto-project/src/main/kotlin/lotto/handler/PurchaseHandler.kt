@@ -5,10 +5,7 @@ import lotto.model.LottoNumber
 import lotto.model.LottoNumbers
 import lotto.service.AccountStore
 import lotto.service.LottoService
-import lotto.strategy.AutoStrategy
-import lotto.strategy.ManualStrategy
-import lotto.strategy.SemiAutoStrategy
-import lotto.strategy.TicketStrategy
+import lotto.strategy.NumberStrategy
 import lotto.view.InputView
 import lotto.view.OutputView
 
@@ -73,7 +70,7 @@ class PurchaseHandler(
         count: Int,
         manualInputs: List<LottoNumbers>,
         semiAutoInputs: List<LottoNumbers>,
-    ): List<TicketStrategy> =
-        manualInputs.map { ManualStrategy(it) } + semiAutoInputs.map { SemiAutoStrategy(it) } +
-            List(count - manualInputs.size - semiAutoInputs.size) { AutoStrategy() }
+    ): List<NumberStrategy> =
+        manualInputs.map { NumberStrategy.manual(it) } + semiAutoInputs.map { NumberStrategy.semiAuto(it) } +
+            List(count - manualInputs.size - semiAutoInputs.size) { NumberStrategy.auto() }
 }

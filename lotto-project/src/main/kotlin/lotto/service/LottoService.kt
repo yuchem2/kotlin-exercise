@@ -2,13 +2,14 @@ package lotto.service
 
 import lotto.constant.TICKET_PRICE
 import lotto.model.LottoDraw
+import lotto.model.LottoTicket
 import lotto.model.LottoTickets
-import lotto.strategy.TicketStrategy
+import lotto.strategy.NumberStrategy
 
 object LottoService {
     fun purchaseAndSave(
         account: AccountStore,
-        strategies: List<TicketStrategy>,
+        strategies: List<NumberStrategy>,
     ): LottoTickets {
         val tickets = createTickets(strategies)
         val lastRound = LottoStore.getLast()
@@ -39,8 +40,8 @@ object LottoService {
         return lastRound
     }
 
-    private fun createTickets(strategies: List<TicketStrategy>): LottoTickets {
-        val tickets = strategies.map { it.create() }
+    private fun createTickets(strategies: List<NumberStrategy>): LottoTickets {
+        val tickets = strategies.map { LottoTicket.create(it) }
         return LottoTickets(tickets)
     }
 
