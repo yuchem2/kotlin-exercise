@@ -10,4 +10,9 @@ enum class Menu(
     HISTORY(4, "회차 조회"),
     ACCOUNT(5, "계좌 조회"),
     EXIT(0, "종료"),
+    ;
+
+    companion object {
+        fun from(number: Int): Menu = entries.find { it.number == number } ?: throw IllegalArgumentException("없는 메뉴입니다.")
+    }
 }
