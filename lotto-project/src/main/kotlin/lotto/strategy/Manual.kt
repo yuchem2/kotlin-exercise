@@ -1,14 +1,13 @@
 package lotto.strategy
 
 import lotto.model.LottoNumbers
-import lotto.model.LottoTicket
 
-class ManualStrategy(
+internal class Manual(
     private val numbers: LottoNumbers,
-) : TicketStrategy {
+) : NumberStrategy {
     init {
         numbers.requireFull()
     }
 
-    override fun create() = LottoTicket(numbers)
+    override fun pick() = numbers
 }
