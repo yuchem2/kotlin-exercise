@@ -27,6 +27,12 @@ class LottoDraw(
     private var isEnded: Boolean = false,
     private var finalTicketCount: Int = 0,
 ) {
+    constructor(round: Int, tickets: LottoTickets) : this(
+        round = round,
+        tickets = tickets,
+        finalTicketCount = tickets.size,
+    )
+
     init {
         finalTicketCount = tickets.size
     }
