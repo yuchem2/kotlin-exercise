@@ -1,7 +1,6 @@
 package lotto.view
 
 import lotto.model.LottoNumber
-import lotto.model.LottoNumbers
 import lotto.model.Menu
 
 class InputView {
@@ -21,10 +20,7 @@ class InputView {
         return value
     }
 
-    fun inputTicketNumbers(): LottoNumbers {
-        val line = readlnOrNull() ?: throw IllegalArgumentException("올바른 문장을 입력해주세요")
-        return LottoNumbers(parseNumbers(line))
-    }
+    fun inputTicketNumbers(): List<LottoNumber> = parseNumbers(readlnOrNull() ?: throw IllegalArgumentException("올바른 문장을 입력해주세요"))
 
     private fun parseNumbers(line: String): List<LottoNumber> =
         line

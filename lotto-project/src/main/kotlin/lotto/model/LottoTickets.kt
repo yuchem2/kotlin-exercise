@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 @JvmInline
 value class LottoTickets(
-    private val tickets: List<LottoTicket>,
+    private val tickets: List<LottoNumbers>,
 ) {
     val size: Int get() = tickets.size
 

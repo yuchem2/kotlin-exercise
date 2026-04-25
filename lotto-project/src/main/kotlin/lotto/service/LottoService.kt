@@ -2,7 +2,7 @@ package lotto.service
 
 import lotto.constant.TICKET_PRICE
 import lotto.model.LottoDraw
-import lotto.model.LottoTicket
+import lotto.model.LottoNumbers
 import lotto.model.LottoTickets
 import lotto.strategy.NumberStrategy
 
@@ -41,7 +41,7 @@ object LottoService {
     }
 
     private fun createTickets(strategies: List<NumberStrategy>): LottoTickets {
-        val tickets = strategies.map { LottoTicket.create(it) }
+        val tickets = strategies.map { LottoNumbers(it.pick()) }
         return LottoTickets(tickets)
     }
 
