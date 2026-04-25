@@ -5,8 +5,8 @@ import lotto.handler.DepositHandler
 import lotto.handler.DrawHandler
 import lotto.handler.HistoryHandler
 import lotto.handler.PurchaseHandler
-import lotto.model.Menu
 import lotto.view.InputView
+import lotto.view.Menu
 import lotto.view.OutputView
 
 class App(

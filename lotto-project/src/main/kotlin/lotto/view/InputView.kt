@@ -1,7 +1,6 @@
 package lotto.view
 
 import lotto.model.LottoNumber
-import lotto.model.Menu
 
 class InputView {
     fun inputMenu(): Menu = Menu.from(inputNumber())

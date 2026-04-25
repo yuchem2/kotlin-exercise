@@ -1,4 +1,4 @@
-package lotto.service
+package lotto.generator
 
 import lotto.model.LottoNumbers
 import lotto.model.WinningNumbers

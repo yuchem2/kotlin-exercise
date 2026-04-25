@@ -1,6 +1,6 @@
 package lotto.strategy
 
-import lotto.service.RandomNumberGenerator
+import lotto.generator.RandomNumberGenerator
 
 internal class Auto : NumberStrategy {
     override fun pick() = RandomNumberGenerator.pick()
