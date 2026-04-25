@@ -5,15 +5,9 @@ import lotto.model.LottoNumbers
 import lotto.model.Menu
 
 class InputView {
-    fun inputMenu(): Menu {
-        val number = readlnOrNull()?.toIntOrNull() ?: throw IllegalArgumentException("숫자를 입력해주세요.")
-        return Menu.entries.find { it.number == number } ?: throw IllegalArgumentException("없는 메뉴입니다.")
-    }
+    fun inputMenu(): Menu = Menu.from(inputNumber())
 
-    fun inputNumber(): Int {
-        val value = readlnOrNull()?.toIntOrNull() ?: throw IllegalArgumentException("숫자를 입력해주세요.")
-        return value
-    }
+    fun inputNumber(): Int = readlnOrNull()?.toIntOrNull() ?: throw IllegalArgumentException("숫자를 입력해주세요.")
 
     fun inputNonNegative(): Int {
         val value = inputNumber()
@@ -28,12 +22,12 @@ class InputView {
     }
 
     fun inputManualTicketNumbers(): LottoNumbers.Full {
-        val line = readlnOrNull() ?: throw IllegalArgumentException("번호를 입력해주세요")
+        val line = readlnOrNull() ?: throw IllegalArgumentException("올바른 문장을 입력해주세요")
         return LottoNumbers.Full(parseNumbers(line))
     }
 
     fun inputSemiAutoTicketNumbers(): LottoNumbers.Half {
-        val line = readlnOrNull() ?: throw IllegalArgumentException("번호를 입력해주세요")
+        val line = readlnOrNull() ?: throw IllegalArgumentException("올바른 문장을 입력해주세요")
         return LottoNumbers.Half(parseNumbers(line))
     }
 
