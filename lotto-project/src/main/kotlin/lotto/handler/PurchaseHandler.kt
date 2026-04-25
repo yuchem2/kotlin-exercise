@@ -1,9 +1,8 @@
 package lotto.handler
 
-import lotto.constant.MAX_NUMBER
-import lotto.constant.MIN_NUMBER
 import lotto.constant.TICKET_PRICE
-import lotto.constant.TICKET_SIZE
+import lotto.model.LottoNumber
+import lotto.model.LottoNumbers
 import lotto.service.AccountStore
 import lotto.service.LottoService
 import lotto.strategy.AutoStrategy
@@ -58,22 +57,22 @@ class PurchaseHandler(
         return semiAutoCount
     }
 
-    private fun inputManualTicketNumbers(count: Int): List<List<Int>> =
+    private fun inputManualTicketNumbers(count: Int): List<LottoNumbers.Full> =
         List(count) {
-            outputView.printGuidance("수동 번호(${MIN_NUMBER}-${MAX_NUMBER}) ${TICKET_SIZE}개 입력: ")
+            outputView.printGuidance("수동 번호(${LottoNumber.MIN}-${LottoNumber.MAX}) ${LottoNumbers.Full}개 입력: ")
             inputView.inputManualTicketNumbers()
         }
 
-    private fun inputSemiAutoTicketNumbers(count: Int): List<List<Int>> =
+    private fun inputSemiAutoTicketNumbers(count: Int): List<LottoNumbers.Half> =
         List(count) {
-            outputView.printGuidance("반자동 번호(${MIN_NUMBER}-${MAX_NUMBER}) ${TICKET_SIZE}개 미만 입력: ")
-            inputView.inputManualTicketNumbers()
+            outputView.printGuidance("반자동 번호(${LottoNumber.MIN}-${LottoNumber.MAX}) ${LottoNumbers.Full}개 미만 입력: ")
+            inputView.inputSemiAutoTicketNumbers()
         }
 
     private fun buildStrategies(
         count: Int,
-        manualInputs: List<List<Int>>,
-        semiAutoInputs: List<List<Int>>,
+        manualInputs: List<LottoNumbers.Full>,
+        semiAutoInputs: List<LottoNumbers.Half>,
     ): List<TicketStrategy> =
         manualInputs.map { ManualStrategy(it) } + semiAutoInputs.map { SemiAutoStrategy(it) } +
             List(count - manualInputs.size - semiAutoInputs.size) { AutoStrategy() }

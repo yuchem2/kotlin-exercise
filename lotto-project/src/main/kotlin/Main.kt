@@ -33,5 +33,9 @@ fun main() {
             historyHandler = HistoryHandler(inputView, outputView),
         )
 
-    app.run()
+    try {
+        app.run()
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
 }

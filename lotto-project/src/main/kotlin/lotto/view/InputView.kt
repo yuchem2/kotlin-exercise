@@ -1,5 +1,7 @@
 package lotto.view
 
+import lotto.model.LottoNumber
+import lotto.model.LottoNumbers
 import lotto.model.Menu
 
 interface InputPort {
@@ -40,11 +42,23 @@ class InputView(
         return value
     }
 
-    fun inputManualTicketNumbers(): List<Int> {
-        val values = input.readLine() ?: throw IllegalArgumentException("번호를 입력해주세요")
-        return values
+    fun inputManualTicketNumbers(): LottoNumbers.Full {
+        val line = input.readLine() ?: throw IllegalArgumentException("번호를 입력해주세요")
+        return LottoNumbers.Full(parseNumbers(line))
+    }
+
+    fun inputSemiAutoTicketNumbers(): LottoNumbers.Half {
+        val line = input.readLine() ?: throw IllegalArgumentException("번호를 입력해주세요")
+        return LottoNumbers.Half(parseNumbers(line))
+    }
+
+    private fun parseNumbers(line: String): List<LottoNumber> {
+        val list = line
             .split(Regex("\\s+"))
             .filter { it.isNotBlank() }
             .map { it.toIntOrNull() ?: throw IllegalArgumentException("숫자를 입력해주세요.") }
+            .map { LottoNumber(it) }
+        require(list.size == list.toSet().size) { "중복된 번호가 있습니다." }
+        return list
     }
 }

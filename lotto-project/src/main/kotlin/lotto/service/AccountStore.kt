@@ -7,7 +7,7 @@ import lotto.model.Account
 import java.io.File
 
 class AccountStore {
-    private var account: Account
+    private val account: Account
 
     init {
         val data =

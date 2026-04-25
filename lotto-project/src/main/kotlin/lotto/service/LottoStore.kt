@@ -8,7 +8,7 @@ import lotto.model.LottoDraws
 import java.io.File
 
 object LottoStore {
-    private var draws: LottoDraws = LottoDraws(emptyList())
+    private var draws: LottoDraws
 
     init {
         val data =
