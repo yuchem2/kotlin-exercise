@@ -58,7 +58,7 @@ jar build/libs/lotto-project-1.0-SNAPSHOT.jar
 
 예) 총 20장 구매 시 `수동 3장 + 반자동 2장 + 자동 15장` 식으로 조합 가능. 자동만 구매하고 싶다면 수동/반자동 수량에 `0`을 입력합니다.
 
-티켓 생성 방식은 `TicketStrategy` 인터페이스로 추상화되어 있으며, 새 전략을 추가하려면 구현체를 하나 만들고 `PurchaseHandler.buildStrategies`에서 조립 규칙만 확장하면 됩니다.
+티켓 생성 방식은 `NumberStrategy` 인터페이스로 추상화되어 있고, `LottoTicket.create(strategy)`가 Context 역할을 맡아 strategy가 고른 번호로 티켓을 조립합니다. 구현체(`Manual`/`SemiAuto`/`Auto`)는 `internal`로 캡슐화되어 모듈 외부에서는 추상에만 의존합니다. 새 전략을 추가하려면 `NumberStrategy` 구현체를 하나 만들고 `PurchaseHandler.buildStrategies`에서 조립 규칙만 확장하면 됩니다.
 
 ## 회차 진행
 
@@ -87,7 +87,7 @@ lotto-project
     ├── Main.kt
     └── lotto
         ├── App.kt                      # 메뉴 루프
-        ├── constant/LottoConstants.kt  # 매직 넘버 상수
+        ├── constant/LottoConstants.kt  # 티켓 가격 / 영속화 경로
         ├── handler                     # 메뉴별 핸들러 (단일 책임)
         │   ├── Handler.kt
         │   ├── AccountHandler.kt
@@ -97,19 +97,19 @@ lotto-project
         │   └── HistoryHandler.kt
         ├── model                        # 도메인 모델 + 일급 컬렉션
         │   ├── Account.kt
-        │   ├── LottoNumber.kt            # LottoNumber value class + LottoNumbers sealed (Full/Half)
-        │   ├── LottoTicket.kt            # LottoNumbers.Full 래핑 (inline value class)
+        │   ├── LottoNumber.kt            # LottoNumber + LottoNumbers value class
+        │   ├── LottoTicket.kt            # LottoNumbers 래핑 + 6개 검증,
         │   ├── LottoTickets.kt           # LottoTicket 일급 컬렉션 (inline value class)
         │   ├── LottoDraw.kt
         │   ├── LottoDraws.kt             # LottoDraw 일급 컬렉션
-        │   ├── WinningNumbers.kt         # 당첨 번호 + 보너스 (검증 응집)
+        │   ├── WinningNumbers.kt         # 당첨 번호 + 보너스
         │   ├── LottoRank.kt              # 등수 + 상금 + matchCount/requiredBonus
         │   └── Menu.kt                   # Menu.from() 팩토리 포함
-        ├── strategy                     # 티켓 생성 전략 (전략 패턴)
-        │   ├── TicketStrategy.kt
-        │   ├── AutoStrategy.kt
-        │   ├── ManualStrategy.kt
-        │   └── SemiAutoStrategy.kt
+        ├── strategy                     # 번호 선택 전략
+        │   ├── NumberStrategy.kt         # 추상
+        │   ├── Auto.kt                   # internal — 6개 자동 생성
+        │   ├── Manual.kt                 # internal — 입력 6개 그대로
+        │   └── SemiAuto.kt               # internal — 1~5개 입력 + 자동 채움
         ├── service
         │   ├── LottoService.kt           # 구매 / 추첨 유즈케이스
         │   ├── LottoStore.kt             # 회차 영속화

@@ -19,9 +19,12 @@ class PurchaseHandler(
             val count = inputCount()
             val manualCount = inputManualCount(count)
             val semiAutoCount = inputSemiAutoCount(count, manualCount)
-            val manualTicketNumbers = inputManualTicketNumbers(manualCount)
-            val semiAutoTicketNumbers = inputSemiAutoTicketNumbers(semiAutoCount)
-            val strategies = buildStrategies(count, manualTicketNumbers, semiAutoTicketNumbers)
+            val autoCount = count - manualCount - semiAutoCount
+
+            val strategies =
+                buildManualStrategies(manualCount) +
+                    buildSemiAutoStrategies(semiAutoCount) +
+                    List(autoCount) { NumberStrategy.auto() }
 
             LottoService.purchaseAndSave(account, strategies)
             outputView.printMessage("구매가 완료되었습니다.")
@@ -54,23 +57,15 @@ class PurchaseHandler(
         return semiAutoCount
     }
 
-    private fun inputManualTicketNumbers(count: Int): List<LottoNumbers> =
+    private fun buildManualStrategies(count: Int): List<NumberStrategy> =
         List(count) {
             outputView.printGuidance("수동 번호(${LottoNumber.MIN}-${LottoNumber.MAX}) ${LottoNumbers.FULL_SIZE}개 입력: ")
-            inputView.inputTicketNumbers()
+            NumberStrategy.manual(inputView.inputTicketNumbers())
         }
 
-    private fun inputSemiAutoTicketNumbers(count: Int): List<LottoNumbers> =
+    private fun buildSemiAutoStrategies(count: Int): List<NumberStrategy> =
         List(count) {
             outputView.printGuidance("반자동 번호(${LottoNumber.MIN}-${LottoNumber.MAX}) ${LottoNumbers.FULL_SIZE}개 미만 입력: ")
-            inputView.inputTicketNumbers()
+            NumberStrategy.semiAuto(inputView.inputTicketNumbers())
         }
-
-    private fun buildStrategies(
-        count: Int,
-        manualInputs: List<LottoNumbers>,
-        semiAutoInputs: List<LottoNumbers>,
-    ): List<NumberStrategy> =
-        manualInputs.map { NumberStrategy.manual(it) } + semiAutoInputs.map { NumberStrategy.semiAuto(it) } +
-            List(count - manualInputs.size - semiAutoInputs.size) { NumberStrategy.auto() }
 }
