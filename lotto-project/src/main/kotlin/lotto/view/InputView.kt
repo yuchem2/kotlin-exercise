@@ -21,24 +21,15 @@ class InputView {
         return value
     }
 
-    fun inputManualTicketNumbers(): LottoNumbers.Full {
+    fun inputTicketNumbers(): LottoNumbers {
         val line = readlnOrNull() ?: throw IllegalArgumentException("올바른 문장을 입력해주세요")
-        return LottoNumbers.Full(parseNumbers(line))
+        return LottoNumbers(parseNumbers(line))
     }
 
-    fun inputSemiAutoTicketNumbers(): LottoNumbers.Half {
-        val line = readlnOrNull() ?: throw IllegalArgumentException("올바른 문장을 입력해주세요")
-        return LottoNumbers.Half(parseNumbers(line))
-    }
-
-    private fun parseNumbers(line: String): List<LottoNumber> {
-        val list =
-            line
-                .split(Regex("\\s+"))
-                .filter { it.isNotBlank() }
-                .map { it.toIntOrNull() ?: throw IllegalArgumentException("숫자를 입력해주세요.") }
-                .map { LottoNumber(it) }
-        require(list.size == list.toSet().size) { "중복된 번호가 있습니다." }
-        return list
-    }
+    private fun parseNumbers(line: String): List<LottoNumber> =
+        line
+            .split(Regex("\\s+"))
+            .filter { it.isNotBlank() }
+            .map { it.toIntOrNull() ?: throw IllegalArgumentException("숫자를 입력해주세요.") }
+            .map { LottoNumber(it) }
 }

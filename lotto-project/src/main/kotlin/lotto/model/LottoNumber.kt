@@ -1,6 +1,5 @@
 package lotto.model
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -19,40 +18,29 @@ value class LottoNumber(
 }
 
 @Serializable
-sealed class LottoNumbers {
-    abstract val numbers: List<LottoNumber>
+@JvmInline
+value class LottoNumbers(
+    val numbers: List<LottoNumber>,
+) {
     val size: Int get() = numbers.size
 
+    init {
+        require(numbers.toSet().size == numbers.size) { "번호는 중복될 수 없습니다" }
+    }
+
     fun count(other: LottoNumbers): Int = numbers.count { it in other.numbers }
+
+    fun requireFull() {
+        require(numbers.size == LottoNumbers.FULL_SIZE) { "로또 번호는 ${LottoNumbers.FULL_SIZE}개여야 합니다" }
+    }
 
     override fun toString(): String = numbers.joinToString(separator = ", ")
 
     operator fun contains(number: LottoNumber) = numbers.contains(number)
 
-    @Serializable
-    @SerialName("full")
-    class Full(
-        override val numbers: List<LottoNumber>,
-    ) : LottoNumbers() {
-        init {
-            require(numbers.size == SIZE) { "로또 번호는 ${SIZE}개여야 합니다" }
-        }
+    operator fun plus(other: LottoNumbers): LottoNumbers = LottoNumbers(numbers + other.numbers)
 
-        companion object {
-            const val SIZE = 6
-        }
-    }
-
-    @Serializable
-    @SerialName("half")
-    class Half(
-        override val numbers: List<LottoNumber>,
-    ) : LottoNumbers() {
-        init {
-            require(numbers.isNotEmpty()) { "로또 번호는 비어있으면 안됩니다." }
-            require(numbers.size < Full.SIZE) { "로또 번호는 ${Full.SIZE}개 미만이어야 합니다" }
-        }
-
-        operator fun plus(other: Half) = Full(numbers + other.numbers)
+    companion object {
+        const val FULL_SIZE = 6
     }
 }

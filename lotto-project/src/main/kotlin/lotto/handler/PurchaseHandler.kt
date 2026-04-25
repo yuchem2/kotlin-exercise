@@ -57,22 +57,22 @@ class PurchaseHandler(
         return semiAutoCount
     }
 
-    private fun inputManualTicketNumbers(count: Int): List<LottoNumbers.Full> =
+    private fun inputManualTicketNumbers(count: Int): List<LottoNumbers> =
         List(count) {
-            outputView.printGuidance("수동 번호(${LottoNumber.MIN}-${LottoNumber.MAX}) ${LottoNumbers.Full.SIZE}개 입력: ")
-            inputView.inputManualTicketNumbers()
+            outputView.printGuidance("수동 번호(${LottoNumber.MIN}-${LottoNumber.MAX}) ${LottoNumbers.FULL_SIZE}개 입력: ")
+            inputView.inputTicketNumbers()
         }
 
-    private fun inputSemiAutoTicketNumbers(count: Int): List<LottoNumbers.Half> =
+    private fun inputSemiAutoTicketNumbers(count: Int): List<LottoNumbers> =
         List(count) {
-            outputView.printGuidance("반자동 번호(${LottoNumber.MIN}-${LottoNumber.MAX}) ${LottoNumbers.Full.SIZE}개 미만 입력: ")
-            inputView.inputSemiAutoTicketNumbers()
+            outputView.printGuidance("반자동 번호(${LottoNumber.MIN}-${LottoNumber.MAX}) ${LottoNumbers.FULL_SIZE}개 미만 입력: ")
+            inputView.inputTicketNumbers()
         }
 
     private fun buildStrategies(
         count: Int,
-        manualInputs: List<LottoNumbers.Full>,
-        semiAutoInputs: List<LottoNumbers.Half>,
+        manualInputs: List<LottoNumbers>,
+        semiAutoInputs: List<LottoNumbers>,
     ): List<TicketStrategy> =
         manualInputs.map { ManualStrategy(it) } + semiAutoInputs.map { SemiAutoStrategy(it) } +
             List(count - manualInputs.size - semiAutoInputs.size) { AutoStrategy() }
