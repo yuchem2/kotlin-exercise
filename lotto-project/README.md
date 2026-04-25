@@ -97,13 +97,14 @@ lotto-project
         │   └── HistoryHandler.kt
         ├── model                        # 도메인 모델 + 일급 컬렉션
         │   ├── Account.kt
-        │   ├── LottoTicket.kt
-        │   ├── LottoTickets.kt           # LottoTicket 일급 컬렉션
+        │   ├── LottoNumber.kt            # LottoNumber value class + LottoNumbers sealed (Full/Half)
+        │   ├── LottoTicket.kt            # LottoNumbers.Full 래핑 (inline value class)
+        │   ├── LottoTickets.kt           # LottoTicket 일급 컬렉션 (inline value class)
         │   ├── LottoDraw.kt
         │   ├── LottoDraws.kt             # LottoDraw 일급 컬렉션
         │   ├── WinningNumbers.kt         # 당첨 번호 + 보너스 (검증 응집)
-        │   ├── LottoRank.kt
-        │   └── Menu.kt
+        │   ├── LottoRank.kt              # 등수 + 상금 + matchCount/requiredBonus
+        │   └── Menu.kt                   # Menu.from() 팩토리 포함
         ├── strategy                     # 티켓 생성 전략 (전략 패턴)
         │   ├── TicketStrategy.kt
         │   ├── AutoStrategy.kt
