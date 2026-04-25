@@ -29,8 +29,6 @@ sealed class LottoNumbers {
 
     operator fun contains(number: LottoNumber) = numbers.contains(number)
 
-    operator fun contains(number: Int) = contains(LottoNumber(number))
-
     @Serializable
     @SerialName("full")
     class Full(
