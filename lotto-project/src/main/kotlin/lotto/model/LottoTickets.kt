@@ -7,6 +7,8 @@ import kotlinx.serialization.Serializable
 value class LottoTickets(
     private val tickets: List<LottoNumbers>,
 ) {
+    constructor() : this(emptyList())
+
     val size: Int get() = tickets.size
 
     operator fun plus(other: LottoTickets) = LottoTickets(tickets + other.tickets)

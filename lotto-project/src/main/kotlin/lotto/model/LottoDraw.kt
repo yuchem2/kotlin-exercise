@@ -38,7 +38,7 @@ class LottoDraw(
 
         result = tickets.groupByRank(winningNumbers ?: return)
         totalIncome = result.entries.fold(0) { acc, (rank, count) -> acc + rank.prize * count }
-        this.tickets = LottoTickets(emptyList())
+        this.tickets = LottoTickets()
         isEnded = true
     }
 
