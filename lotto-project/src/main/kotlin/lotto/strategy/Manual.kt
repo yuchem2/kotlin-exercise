@@ -1,13 +1,9 @@
 package lotto.strategy
 
-import lotto.model.LottoNumbers
+import lotto.model.LottoNumber
 
 internal class Manual(
-    private val numbers: LottoNumbers,
+    private val numbers: List<LottoNumber>,
 ) : NumberStrategy {
-    init {
-        numbers.requireFull()
-    }
-
     override fun pick() = numbers
 }

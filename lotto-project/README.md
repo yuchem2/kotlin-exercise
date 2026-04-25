@@ -98,8 +98,7 @@ lotto-project
         ├── model                        # 도메인 모델 + 일급 컬렉션
         │   ├── Account.kt
         │   ├── LottoNumber.kt            # LottoNumber + LottoNumbers value class
-        │   ├── LottoTicket.kt            # LottoNumbers 래핑 + 6개 검증,
-        │   ├── LottoTickets.kt           # LottoTicket 일급 컬렉션 (inline value class)
+        │   ├── LottoTickets.kt           # LottoNumbers 일급 컬렉션 (inline value class)
         │   ├── LottoDraw.kt
         │   ├── LottoDraws.kt             # LottoDraw 일급 컬렉션
         │   ├── WinningNumbers.kt         # 당첨 번호 + 보너스
