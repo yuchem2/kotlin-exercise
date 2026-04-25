@@ -5,9 +5,9 @@ import lotto.model.WinningNumbers
 
 object WinningNumberGenerator {
     fun generate(): WinningNumbers {
-        val numbers = RandomNumberGenerator.pick(LottoNumbers.Full.SIZE + 1)
+        val numbers = RandomNumberGenerator.pick(LottoNumbers.FULL_SIZE + 1)
         val bonus = numbers.last()
         val winnings = numbers.dropLast(1)
-        return WinningNumbers(LottoNumbers.Full(winnings), bonus)
+        return WinningNumbers(LottoNumbers(winnings), bonus)
     }
 }
