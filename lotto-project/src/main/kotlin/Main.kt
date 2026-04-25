@@ -1,3 +1,4 @@
+import java.io.PrintStream
 import lotto.App
 import lotto.handler.AccountHandler
 import lotto.handler.DepositHandler
@@ -9,8 +10,8 @@ import lotto.view.InputView
 import lotto.view.OutputView
 
 private fun setupEncoding() {
-    System.setOut(java.io.PrintStream(System.out, true, "UTF-8"))
-    System.setErr(java.io.PrintStream(System.err, true, "UTF-8"))
+    System.setOut(PrintStream(System.out, true, "UTF-8"))
+    System.setErr(PrintStream(System.err, true, "UTF-8"))
 }
 
 fun main() {
