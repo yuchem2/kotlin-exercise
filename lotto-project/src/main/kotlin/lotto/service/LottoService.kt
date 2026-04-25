@@ -1,6 +1,7 @@
 package lotto.service
 
 import lotto.constant.TICKET_PRICE
+import lotto.generator.WinningNumberGenerator
 import lotto.model.LottoDraw
 import lotto.model.LottoDraws
 import lotto.model.LottoNumbers

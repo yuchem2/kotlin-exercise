@@ -1,6 +1,5 @@
 package lotto.view
 
-import lotto.model.Menu
 import lotto.util.padEndKo
 import lotto.util.toFormattedString
 

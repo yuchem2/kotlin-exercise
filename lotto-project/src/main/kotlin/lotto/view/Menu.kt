@@ -1,4 +1,4 @@
-package lotto.model
+package lotto.view
 
 enum class Menu(
     val number: Int,
