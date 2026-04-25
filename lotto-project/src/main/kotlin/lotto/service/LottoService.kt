@@ -20,7 +20,7 @@ object LottoService {
             LottoStore.updateLast(lastRound)
         }
 
-        val income: Long = strategies.size * TICKET_PRICE.toLong()
+        val income: Long = strategies.size * TICKET_PRICE
         account.withdraw(income)
 
         return tickets
@@ -39,7 +39,10 @@ object LottoService {
         return lastRound
     }
 
-    private fun createTickets(strategies: List<TicketStrategy>): LottoTickets = LottoTickets(strategies.map { it.create() })
+    private fun createTickets(strategies: List<TicketStrategy>): LottoTickets {
+        val tickets = strategies.map { it.create() }
+        return LottoTickets(tickets)
+    }
 
     private fun createDraw(
         round: Int,

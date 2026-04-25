@@ -1,7 +1,7 @@
 package lotto.model
 
 class Account(
-    amount: Long
+    amount: Long,
 ) {
     var amount: Long = amount
         private set
