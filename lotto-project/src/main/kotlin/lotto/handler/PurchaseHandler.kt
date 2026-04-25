@@ -59,13 +59,13 @@ class PurchaseHandler(
 
     private fun inputManualTicketNumbers(count: Int): List<LottoNumbers.Full> =
         List(count) {
-            outputView.printGuidance("수동 번호(${LottoNumber.MIN}-${LottoNumber.MAX}) ${LottoNumbers.Full}개 입력: ")
+            outputView.printGuidance("수동 번호(${LottoNumber.MIN}-${LottoNumber.MAX}) ${LottoNumbers.Full.SIZE}개 입력: ")
             inputView.inputManualTicketNumbers()
         }
 
     private fun inputSemiAutoTicketNumbers(count: Int): List<LottoNumbers.Half> =
         List(count) {
-            outputView.printGuidance("반자동 번호(${LottoNumber.MIN}-${LottoNumber.MAX}) ${LottoNumbers.Full}개 미만 입력: ")
+            outputView.printGuidance("반자동 번호(${LottoNumber.MIN}-${LottoNumber.MAX}) ${LottoNumbers.Full.SIZE}개 미만 입력: ")
             inputView.inputSemiAutoTicketNumbers()
         }
 
