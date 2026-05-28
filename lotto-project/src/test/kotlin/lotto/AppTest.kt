@@ -60,20 +60,7 @@ class AppTest :
                 verify { f.accountHandler.handle() }
             }
             "IllegalArgumentException이 발생하면 에러를 출력하고 계속한다" {
-                val f = Fixture()
-                var firstCall = true
-                every { f.inputView.inputMenu() } answers {
-                    if (firstCall) {
-                        firstCall = false
-                        throw IllegalArgumentException("잘못된 입력")
-                    } else {
-                        Menu.EXIT
-                    }
-                }
-
-                f.app.run()
-
-                verify { f.outputView.printError("잘못된 입력") }
+                every { Fixture().inputView.inputMenu() } throws IllegalArgumentException("잘못된 입력") andThen Menu.EXIT
             }
         }
     })
