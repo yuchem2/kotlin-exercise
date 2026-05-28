@@ -1,8 +1,8 @@
 package lotto.strategy
 
+import lotto.generator.RandomNumberGenerator
 import lotto.model.LottoNumber
 import lotto.model.LottoNumbers
-import lotto.generator.RandomNumberGenerator
 
 internal class SemiAuto(
     private val fixed: List<LottoNumber>,
