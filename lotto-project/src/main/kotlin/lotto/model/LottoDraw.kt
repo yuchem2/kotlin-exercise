@@ -43,7 +43,7 @@ class LottoDraw(
     }
 
     fun addTicket(tickets: LottoTickets) {
-        if (isEnded) return
+        check(!isEnded) { "이미 종료된 회차에는 티켓을 추가할 수 없습니다." }
         this.tickets += tickets
         finalTicketCount = this.tickets.size
     }
