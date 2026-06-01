@@ -9,23 +9,23 @@ private fun numbersOf(vararg values: Int) = LottoNumbers(values.map { LottoNumbe
 class LottoNumberTest :
     WordSpec({
         "LottoNumber 생성" should {
-            "경계값 1과 45는 허용한다" {
-                LottoNumber(1).number shouldBe 1
-                LottoNumber(45).number shouldBe 45
+            "경계값 MIN과 MAX는 허용한다" {
+                LottoNumber(LottoNumber.MIN).number shouldBe LottoNumber.MIN
+                LottoNumber(LottoNumber.MAX).number shouldBe LottoNumber.MAX
             }
-            "0 이하는 예외를 던진다" {
-                shouldThrow<IllegalArgumentException> { LottoNumber(0) }
+            "MIN 미만은 예외를 던진다" {
+                shouldThrow<IllegalArgumentException> { LottoNumber(LottoNumber.MIN - 1) }
             }
-            "45를 초과하면 예외를 던진다" {
-                shouldThrow<IllegalArgumentException> { LottoNumber(46) }
+            "MAX를 초과하면 예외를 던진다" {
+                shouldThrow<IllegalArgumentException> { LottoNumber(LottoNumber.MAX + 1) }
             }
         }
 
         "LottoNumber.ALL_NUMBERS" should {
-            "1부터 45까지 45개를 가진다" {
-                LottoNumber.ALL_NUMBERS.size shouldBe 45
-                LottoNumber.ALL_NUMBERS.first() shouldBe LottoNumber(1)
-                LottoNumber.ALL_NUMBERS.last() shouldBe LottoNumber(45)
+            "MIN부터 MAX까지 빠짐없이 가진다" {
+                LottoNumber.ALL_NUMBERS.size shouldBe (LottoNumber.MAX - LottoNumber.MIN + 1)
+                LottoNumber.ALL_NUMBERS.first() shouldBe LottoNumber(LottoNumber.MIN)
+                LottoNumber.ALL_NUMBERS.last() shouldBe LottoNumber(LottoNumber.MAX)
             }
         }
 

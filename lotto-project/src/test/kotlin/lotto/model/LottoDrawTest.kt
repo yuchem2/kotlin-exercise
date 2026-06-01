@@ -1,5 +1,6 @@
 package lotto.model
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
@@ -38,10 +39,12 @@ class LottoDrawTest :
                 draw.addTicket(LottoTickets(listOf(numbers(10, 11, 12, 13, 14, 15))))
                 draw.getSummary() shouldContain "총 티켓: 2"
             }
-            "종료 후에는 티켓을 추가하지 않는다" {
+            "종료 후에는 티켓을 추가하면 예외를 던진다" {
                 val draw = drawWith(numbers(1, 2, 3, 4, 5, 6))
                 draw.endDraw(winning)
-                draw.addTicket(LottoTickets(listOf(numbers(10, 11, 12, 13, 14, 15))))
+                shouldThrow<IllegalStateException> {
+                    draw.addTicket(LottoTickets(listOf(numbers(10, 11, 12, 13, 14, 15))))
+                }
                 draw.getSummary() shouldContain "총 티켓: 1"
             }
         }
@@ -75,6 +78,7 @@ class LottoDrawTest :
             "등수별 개수와 총수익을 이어붙인다" {
                 val result = LottoResult(mapOf(LottoRank.FIFTH to 2), 10_000L)
                 result.toString() shouldContain "2"
+                result.toString() shouldContain "1만"
             }
         }
     })

@@ -1,0 +1,13 @@
+{
+  "draws": [
+    {
+      "round": 1,
+      "tickets": [],
+      "winningNumbers": { "mainNumbers": [1, 2, 3, 4, 5, 6], "bonus": 7 },
+      "result": { "FIRST": 1 },
+      "totalIncome": 2100000000,
+      "isEnded": true,
+      "finalTicketCount": 1
+    }
+  ]
+}
