@@ -30,13 +30,13 @@ class LottoNumberTest :
         }
 
         "LottoNumbers 생성" should {
-            "서로 다른 6개면 생성된다" {
-                numbersOf(1, 2, 3, 4, 5, 6).size shouldBe 6
+            "서로 다른 ${LottoNumbers.FULL_SIZE}개면 생성된다" {
+                numbersOf(1, 2, 3, 4, 5, 6).size shouldBe LottoNumbers.FULL_SIZE
             }
             "중복이 있으면 예외를 던진다" {
                 shouldThrow<IllegalArgumentException> { numbersOf(1, 1, 2, 3, 4, 5) }
             }
-            "6개가 아니면 예외를 던진다" {
+            "${LottoNumbers.FULL_SIZE}개가 아니면 예외를 던진다" {
                 shouldThrow<IllegalArgumentException> { numbersOf(1, 2, 3, 4, 5) }
                 shouldThrow<IllegalArgumentException> { numbersOf(1, 2, 3, 4, 5, 6, 7) }
             }
@@ -70,7 +70,7 @@ class LottoNumberTest :
         }
 
         "LottoNumbers.plus" should {
-            "두 묶음을 합치면 6개를 초과해 예외를 던진다" {
+            "두 묶음을 합치면 ${LottoNumbers.FULL_SIZE}개를 초과해 예외를 던진다" {
                 shouldThrow<IllegalArgumentException> {
                     numbersOf(1, 2, 3, 4, 5, 6) + numbersOf(7, 8, 9, 10, 11, 12)
                 }
